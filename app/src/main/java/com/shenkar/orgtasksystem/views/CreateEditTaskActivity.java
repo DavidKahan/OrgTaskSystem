@@ -3,38 +3,48 @@ package com.shenkar.orgtasksystem.views;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.shenkar.orgtasksystem.R;
 import com.shenkar.orgtasksystem.model.Task;
-import com.shenkar.orgtasksystem.presenter.MVCController;
+import com.shenkar.orgtasksystem.controller.MVCController;
 
-import java.io.Serializable;
+import java.util.List;
 
-public class CreateEditTaskActivity extends AppCompatActivity {
+public class CreateEditTaskActivity extends AppCompatActivity implements
+        AdapterView.OnItemSelectedListener {
 
     private MVCController controller;
     Task currentTask = new Task();
     TextView tvDate, tvTime;
     EditText assignedTeamMemberEmail, taskDescription;
     RadioButton radioCategory, radioPriority;
+    Spinner memberSpinner;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_edit_task);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        this.controller = new MVCController(this);
+
+        memberSpinner = (Spinner) findViewById(R.id.member_emails_spinner);
+        memberSpinner.setOnItemSelectedListener(this);
+        loadSpinnerData();
+
 
         this.tvDate = (TextView) findViewById(R.id.tvDate);
         this.tvTime = (TextView) findViewById(R.id.tvTime);
-        this.assignedTeamMemberEmail = (EditText) findViewById(R.id.assignedTeamMemberEmail);
+        //this.assignedTeamMemberEmail = (EditText) findViewById(R.id.assignedTeamMemberEmail);
         this.taskDescription = (EditText) findViewById(R.id.taskDescription);
         this.radioCategory = (RadioButton) findViewById(R.id.radio_general);
         this.radioCategory.setChecked(true);
@@ -43,8 +53,14 @@ public class CreateEditTaskActivity extends AppCompatActivity {
         this.radioPriority = (RadioButton) findViewById(R.id.radio_normal);
         this.radioPriority.setChecked(true);
         this.currentTask.priority = "normal";
+    }
 
-        this.controller = new MVCController(this);
+    private void loadSpinnerData() {
+        List<String> labels = this.controller.getMembers();
+        ArrayAdapter<String> membersAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, labels);
+        membersAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        memberSpinner.setAdapter(membersAdapter);
     }
 
     public void showDatePickerDialog(View v) {
@@ -107,7 +123,7 @@ public class CreateEditTaskActivity extends AppCompatActivity {
         //TODO: error handling
         this.currentTask.dueDate = tvDate.getText().toString();
         this.currentTask.dueTime = tvTime.getText().toString();
-        this.currentTask.assignedTeamMember = assignedTeamMemberEmail.getText().toString();
+        //this.currentTask.assignedTeamMember = assignedTeamMemberEmail.getText().toString();
         this.currentTask.description = taskDescription.getText().toString();
 
         this.currentTask.longitude = "234235";
@@ -117,5 +133,16 @@ public class CreateEditTaskActivity extends AppCompatActivity {
         Intent intent = new Intent(CreateEditTaskActivity.this,MainActivity.class);
         intent.putExtra("CurrentTask", currentTask);
         startActivity(intent);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        String label = parent.getItemAtPosition(position).toString();
+        this.currentTask.assignedTeamMember = label;
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 }

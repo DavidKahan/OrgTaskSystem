@@ -16,18 +16,21 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.shenkar.orgtasksystem.R;
-import com.shenkar.orgtasksystem.presenter.MVCController;
+import com.shenkar.orgtasksystem.model.Member;
+import com.shenkar.orgtasksystem.controller.MVCController;
 
 import java.util.List;
 
 public class CreateTeamActivity extends AppCompatActivity {
-
+    static final int EMAIL_REQUEST = 1;
     private EditText teamName;
     private EditText memberEmail;
+    private EditText memberPass;
     private Button btNewMem;
     private ListView lvEmails;
     private MVCController controller;
     private List<String> members;
+    Member addedMember = new Member();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +41,7 @@ public class CreateTeamActivity extends AppCompatActivity {
 
         this.teamName = (EditText) this.findViewById(R.id.teamName);
         this.memberEmail = (EditText) this.findViewById(R.id.memberEmail);
+        this.memberPass = (EditText) this.findViewById(R.id.memberPass);
         this.btNewMem = (Button) this.findViewById(R.id.btNewMem);
         this.lvEmails = (ListView) this.findViewById(R.id.lvEmails);
         this.controller = new MVCController(this);
@@ -62,10 +66,10 @@ public class CreateTeamActivity extends AppCompatActivity {
                         "\t<LINK to Google Play download>\n");
 
                 /* Send it off to the Activity-Chooser */
-                startActivity(Intent.createChooser(emailIntent, "Send mail..."));
-                //TODO: move to MainActivity
-//                Intent intent = new Intent(CreateTeamActivity.this, MainActivity.class);
-//                startActivity(intent);
+                startActivityForResult(Intent.createChooser(emailIntent, "Send mail..."), EMAIL_REQUEST);
+                //onActivityResult(EMAIL_REQUEST,1,Intent.createChooser(emailIntent, "Send mail..."));
+                //startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+
 
             }
         });
@@ -87,9 +91,12 @@ public class CreateTeamActivity extends AppCompatActivity {
     }
 
     public void handleNewMember(View view){
-        CreateTeamActivity.this.controller.addMember(CreateTeamActivity.this.memberEmail.getText().toString());
+        this.addedMember.email = memberEmail.getText().toString();
+        this.addedMember.password = memberPass.getText().toString();
+        CreateTeamActivity.this.controller.addMember(this.addedMember);
         CreateTeamActivity.this.populateEmails();
         memberEmail.setText("");
+        memberPass.setText("");
     }
 
     @Override
@@ -98,7 +105,6 @@ public class CreateTeamActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -112,5 +118,18 @@ public class CreateTeamActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //TODO: move to MainActivity
+        Intent intent = new Intent(CreateTeamActivity.this, CreateEditTaskActivity.class);
+        startActivity(intent);
+//        // Check which request we're responding to
+//        if (requestCode == EMAIL_REQUEST) {
+//            // Make sure the request was successful
+//            if (resultCode == RESULT_OK) {
+//
+//            }
+//        }
     }
 }

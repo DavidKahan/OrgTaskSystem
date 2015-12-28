@@ -6,20 +6,18 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.shenkar.orgtasksystem.views.AllTasksFragment;
-import com.shenkar.orgtasksystem.views.WaitingFragment;
 
 
 /**
  * Created by David on 12/9/2015.
  */
-public class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
+public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
     final int PAGE_COUNT = 2;
     private String tabTitles[] = new String[] { "WAITING", "ALL TASKS"};
     private Context context;
     private Fragment[] fragments = new Fragment[] { new WaitingFragment(), new AllTasksFragment()};
 
-    public SampleFragmentPagerAdapter(FragmentManager fm, Context context) {
+    public MyFragmentPagerAdapter(FragmentManager fm, Context context) {
         super(fm);
         this.context = context;
     }

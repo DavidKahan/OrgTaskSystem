@@ -31,7 +31,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Add members Email:"
+        android:text="Add Team Members: "
         android:id="@+id/textView2"
         android:layout_below="@+id/teamName"
         android:layout_alignParentStart="true" />
@@ -44,14 +44,24 @@
         android:id="@+id/memberEmail"
         android:layout_below="@+id/textView2"
         android:layout_alignParentStart="true"
-        android:hint="someone@gmail.com" />
+        android:hint="member@gmail.com" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:ems="10"
+        android:id="@+id/memberPass"
+        android:layout_below="@+id/memberEmail"
+        android:layout_alignParentStart="true"
+        android:hint="phone number" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add"
+        android:text="@string/add"
         android:id="@+id/btNewMem"
-        android:layout_alignBottom="@+id/memberEmail"
+        android:layout_alignBottom="@+id/memberPass"
         android:layout_alignParentEnd="true"
         android:onClick="handleNewMember"/>
 
@@ -61,6 +71,6 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/memberEmail"></ListView>
+        android:layout_below="@+id/memberPass"></ListView>
 
 </RelativeLayout>

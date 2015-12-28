@@ -1,14 +1,14 @@
-package com.shenkar.orgtasksystem.presenter;
+package com.shenkar.orgtasksystem.controller;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
 import com.shenkar.orgtasksystem.model.MVCModel;
+import com.shenkar.orgtasksystem.model.Member;
 import com.shenkar.orgtasksystem.model.Task;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -18,25 +18,18 @@ import java.util.List;
 public class MVCController {
     private MVCModel model;
     private List<String> members;
-    private List<String> allTasks;
-    private List<String> waitingTasks;
-
-//    public MVCController(Context app_context, List<String> members) {
-//        this.members = members;
-//        allTasks = new ArrayList<String>();
-//        waitingTasks = new ArrayList<String>();
-//        model = new MVCModel(app_context);
-//    }
+    private List<Task> allTasks;
+    private List<Task> waitingTasks;
 
     public MVCController(Context app_context) {
         members = new ArrayList<String>();
-        allTasks = new ArrayList<String>();
-        waitingTasks = new ArrayList<String>();
+        allTasks = new ArrayList<Task>();
+        waitingTasks = new ArrayList<Task>();
         model = new MVCModel(app_context);
     }
 
     public void deleteTask(final long id) {
-        model.deleteMember("id='" + id + "'");
+        model.deleteTask("id='" + id + "'");
     }
 
     public void deleteAllMembers() {
@@ -57,13 +50,22 @@ public class MVCController {
         return members;
     }
 
-    public List<String> loadAllTasks() {
-        Cursor c = model.loadAllTasks();
+    public List<Task> loadDoneTasks() {
+        Cursor c = model.loadDoneTasks();
         allTasks.clear();
         if (c != null) {
             c.moveToFirst();
             while (c.isAfterLast() == false) {
-                allTasks.add(c.getString(0)+"  "+c.getString(1)+"  "+c.getString(2));
+                Task tmp = new Task();
+                tmp.description = c.getString(0);
+                tmp.assignedTeamMember = c.getString(1);
+                tmp.dueDate = c.getString(2);
+                tmp.dueTime = c.getString(3);
+                tmp.category = c.getString(4);
+                tmp.priority = c.getString(5);
+                tmp.id = c.getString(6);
+                tmp.status = c.getString(7);
+                allTasks.add(tmp);
                 c.moveToNext();
             }
             c.close();
@@ -71,13 +73,22 @@ public class MVCController {
         return allTasks;
     }
 
-    public List<String> loadWaitingTasks() {
+    public List<Task> loadWaitingTasks() {
         Cursor c = model.loadWaitingTasks();
         waitingTasks.clear();
         if (c != null) {
             c.moveToFirst();
             while (c.isAfterLast() == false) {
-                waitingTasks.add(c.getString(0));
+                Task tmp = new Task();
+                tmp.description = c.getString(0);
+                tmp.assignedTeamMember = c.getString(1);
+                tmp.dueDate = c.getString(2);
+                tmp.dueTime = c.getString(3);
+                tmp.category = c.getString(4);
+                tmp.priority = c.getString(5);
+                tmp.id = c.getString(6);
+                tmp.status = c.getString(7);
+                waitingTasks.add(tmp);
                 c.moveToNext();
             }
             c.close();
@@ -86,14 +97,11 @@ public class MVCController {
     }
 
 
-    public void addMember(String Email) {
+    public void addMember(Member member) {
         final ContentValues data = new ContentValues();
-        data.put("email", Email);
+        data.put("email", member.email);
+        data.put("password", member.password);
         model.addMember(data);
-    }
-
-    public void deleteMember(String s) {
-        model.deleteMember("email='" + s + "'");
     }
 
     public void addTask(Task task) {
@@ -108,5 +116,22 @@ public class MVCController {
         data.put("latitude", task.latitude);
         data.put("status", task.status);
         model.addTask(data);
+    }
+
+    public void updateTaskStatusByID(Task task) {
+        final ContentValues data = new ContentValues();
+        data.put("status", task.status);
+//        data.put("priority", task.priority);
+//        data.put("assignedTeamMember", task.assignedTeamMember);
+//        data.put("dueDate", task.dueDate);
+//        data.put("dueTime", task.dueTime);
+//        data.put("longitude", task.longitude);
+//        data.put("latitude", task.latitude);
+//        data.put("status", task.status);
+        model.updateTaskStatusByID(data, task.id);
+    }
+
+    public void deleteMember(String s) {
+        model.deleteMember("email='" + s + "'");
     }
 }

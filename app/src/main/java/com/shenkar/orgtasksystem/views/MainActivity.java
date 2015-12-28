@@ -1,6 +1,7 @@
 package com.shenkar.orgtasksystem.views;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -14,16 +15,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.shenkar.orgtasksystem.R;
 import com.shenkar.orgtasksystem.model.Task;
-import com.shenkar.orgtasksystem.presenter.MVCController;
+import com.shenkar.orgtasksystem.controller.MVCController;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private MVCController controller;
     public Task addedTask = new Task();
     public Intent intent;
+    private MenuItem mSyncMenuItem = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,24 +40,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.controller = new MVCController(this);
 
         intent = getIntent();
-        if (intent != null) {
+        if (intent.hasExtra("CurrentTask")) {
             this.addedTask = (Task) intent.getSerializableExtra("CurrentTask");
             MainActivity.this.controller.addTask(this.addedTask);
         }
-
-//        Bundle bundle = new Bundle();
-//        bundle.putSerializable("addedTask", (Task) intent.getSerializableExtra("CurrentTask"));
-//        WaitingFragment fragobj = new WaitingFragment();
-//        fragobj.setArguments(bundle);
-
+        //region Pager and Tabs
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        viewPager.setAdapter(new SampleFragmentPagerAdapter(getSupportFragmentManager(),
+        viewPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(),
                 MainActivity.this));
 
         // Give the TabLayout the ViewPager
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
+
+        //endregion
 
         //region fab and drawer
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -88,22 +91,49 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        mSyncMenuItem = menu.findItem(R.id.action_sync);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_sync) {
+            startSyncAnimation();
+            this.controller = new MVCController(this);
+            //stopSyncAnimation();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void stopSyncAnimation() {
+        if (mSyncMenuItem != null && mSyncMenuItem.getActionView() != null) {
+            mSyncMenuItem.getActionView().clearAnimation();
+            mSyncMenuItem.setActionView(null);
+        }
+    }
+
+    private void startSyncAnimation() {
+        CharSequence text = "Searching for new Tasks..";
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast = Toast.makeText(this, text, duration);
+        toast.show();
+        if (mSyncMenuItem != null && mSyncMenuItem.getActionView() == null) {
+            ImageView syncImageView = new ImageView(this);
+            int dp = 12;
+            int padding_in_px = (int) (dp * Resources.getSystem().getDisplayMetrics().density);
+            syncImageView.setPadding(padding_in_px, 0, padding_in_px, 0);
+            syncImageView.setImageDrawable(mSyncMenuItem.getIcon());
+            syncImageView.setScaleType(ImageView.ScaleType.CENTER);
+            mSyncMenuItem.setActionView(syncImageView);
+
+            Animation syncAnimation = AnimationUtils.loadAnimation(this, R.anim.sync_animation);
+            syncAnimation.setRepeatCount(Animation.INFINITE);
+            syncImageView.startAnimation(syncAnimation);
+        }
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

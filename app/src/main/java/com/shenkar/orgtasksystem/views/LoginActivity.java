@@ -20,7 +20,7 @@ public class LoginActivity extends Activity {
 
     public void login(View v){
         //TODO if Manager or regular user
-        Intent intent = new Intent(LoginActivity.this, CreateEditTaskActivity.class);
+        Intent intent = new Intent(LoginActivity.this, CreateTeamActivity.class);
         startActivity(intent);
     }
 }

@@ -15,10 +15,10 @@ public class MVCModel {
     private static final int DB_VERSION = 1;
 
     private static final String MEMBERS_TABLE_NAME = "members";
-    private static final String DB_CREATE_QUERY_MEMBERS = "CREATE TABLE " + MVCModel.MEMBERS_TABLE_NAME + " (id integer primary key autoincrement, email text not null);";
+    private static final String DB_CREATE_QUERY_MEMBERS = "CREATE TABLE " + MVCModel.MEMBERS_TABLE_NAME + " (_id integer primary key autoincrement, email text not null, password text not null);";
 
     private static final String TASKS_TABLE_NAME = "tasks";
-    private static final String DB_CREATE_QUERY_TASKS = "CREATE TABLE " + MVCModel.TASKS_TABLE_NAME + " (id integer primary key autoincrement, description text not null, category text not null, priority text not null, assignedTeamMember text not null, dueDate text not null, dueTime text not null, longitude text not null, latitude text not null, status);";
+    private static final String DB_CREATE_QUERY_TASKS = "CREATE TABLE " + MVCModel.TASKS_TABLE_NAME + " (_id integer primary key autoincrement, description text not null, category text not null, priority text not null, assignedTeamMember text not null, dueDate text not null, dueTime text not null, longitude text not null, latitude text not null, status text not null);";
 
     private final SQLiteDatabase database;
     private final SQLiteOpenHelper helper;
@@ -56,19 +56,20 @@ public class MVCModel {
         this.database.insert(MVCModel.TASKS_TABLE_NAME, null, data);
     }
 
-    public Cursor loadAllTasks() {
-        final Cursor c = this.database.query(MVCModel.TASKS_TABLE_NAME, new String[]{"description", "assignedTeamMember", "dueDate"}, null, null, null, null, "dueDate ASC");
+    public Cursor loadDoneTasks() {
+        final Cursor c = this.database.query(MVCModel.TASKS_TABLE_NAME, new String[]{"description", "assignedTeamMember", "dueDate", "dueTime", "category", "priority","_id", "status" }, "status=?", new String[] { "DONE" }, null, null, "dueDate ASC");
         return c;
     }
     public Cursor loadWaitingTasks() {
 //        final Cursor c = this.database.query(MVCModel.TASKS_TABLE_NAME, new String[]{"description","assignedTeamMember","dueDate"}, null, null, null, null,"dueDate ASC");
-        Cursor c = this.database.rawQuery("SELECT description,assignedTeamMember,dueDate FROM " + TASKS_TABLE_NAME + " WHERE status = WAITING", null);
+        final Cursor c = this.database.query(MVCModel.TASKS_TABLE_NAME, new String[]{"description", "assignedTeamMember", "dueDate", "dueTime", "category", "priority","_id", "status" }, "status=?", new String[] { "WAITING" }, null, null, "dueDate ASC");
         return c;
     }
 
     public void deleteTask(final String field_params) {
         this.database.delete(MVCModel.TASKS_TABLE_NAME, field_params, null);
     }
-
-
+    public void updateTaskStatusByID(ContentValues data, String id) {
+        this.database.update(MVCModel.TASKS_TABLE_NAME, data, "_id=?", new String[] { id});
+    }
 }

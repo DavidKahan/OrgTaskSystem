@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.shenkar.orgtasksystem.R;
 import com.shenkar.orgtasksystem.model.Task;
-import com.shenkar.orgtasksystem.presenter.MVCController;
+import com.shenkar.orgtasksystem.controller.MVCController;
 
 import java.util.List;
 
@@ -22,15 +22,16 @@ import java.util.List;
 public class RecyclerAdapter extends RecyclerView.Adapter <RecyclerAdapter.MyViewHolder>{
 
     //private LayoutInflater inflater;
-    private List<String> tasks;
+    private List<Task> tasks;
     private Activity activity;
     private MVCController controller;
+//    private Task current;
 
-    public RecyclerAdapter(List<String> tasks) {
+    public RecyclerAdapter(List<Task> tasks) {
         this.tasks = tasks;
     }
 
-    public RecyclerAdapter(List<String> tasks, Activity activity) {
+    public RecyclerAdapter(List<Task> tasks, Activity activity) {
         this.tasks = tasks;
         this.activity = activity;
     }
@@ -45,14 +46,17 @@ public class RecyclerAdapter extends RecyclerView.Adapter <RecyclerAdapter.MyVie
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        String current = tasks.get(position);
-        holder.task.setText(current);
+
+        final Task current = tasks.get(position);
+        holder.description.setText(current.description);
+        holder.memberEmail.setText(current.assignedTeamMember);
+        holder.dueDate.setText(current.dueDate);
         holder.taskView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //TODO if Manager or User
-                Intent intent = new Intent(activity,CreateEditTaskActivity.class);
-                //intent.putExtra("CurrentTask", currentTask);
+                Intent intent = new Intent(activity,ReportTaskStatusActivity.class);
+                intent.putExtra("CurrentTask", current);
                 activity.startActivity(intent);
 
             }
@@ -65,14 +69,16 @@ public class RecyclerAdapter extends RecyclerView.Adapter <RecyclerAdapter.MyVie
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView task;
+        TextView description, memberEmail, dueDate;
         View taskView;
         //Button done;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             taskView = itemView;
-            task = (TextView) itemView.findViewById(R.id.task);
+            description = (TextView) itemView.findViewById(R.id.taskDescription);
+            memberEmail= (TextView) itemView.findViewById(R.id.taskAssignedMember);
+            dueDate = (TextView) itemView.findViewById(R.id.taskDueDate);
             //done = (Button) itemView.findViewById(R.id.done_button);
         }
     }

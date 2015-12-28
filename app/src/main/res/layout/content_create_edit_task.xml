@@ -35,7 +35,7 @@
                 android:id="@+id/taskDescription"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
-                android:hint="Drink Coffee" />
+                android:hint="Tap and enter task description" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -150,14 +150,19 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Assigned Team Member Email:" />
-            <EditText
-                android:inputType="textEmailAddress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/assignedTeamMemberEmail"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="true"
-                android:hint="someone@company.com" />
+
+            <Spinner
+                android:id="@+id/member_emails_spinner"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+            <!--<EditText-->
+                <!--android:inputType="textEmailAddress"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:id="@+id/assignedTeamMemberEmail"-->
+                <!--android:layout_alignParentStart="true"-->
+                <!--android:layout_alignParentEnd="true"-->
+                <!--android:hint="someone@company.com" />-->
 
             <Button
                 android:layout_marginTop="20dp"
