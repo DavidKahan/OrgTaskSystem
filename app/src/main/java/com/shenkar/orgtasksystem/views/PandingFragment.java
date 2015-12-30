@@ -11,11 +11,10 @@ import android.view.ViewGroup;
 import com.shenkar.orgtasksystem.R;
 import com.shenkar.orgtasksystem.controller.MVCController;
 
-
 /**
- * Created by david on 17/12/2015.
+ * Created by david on 29/12/2015.
  */
-public class AllTasksFragment extends Fragment {
+public class PandingFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
 //    private RecyclerView.LayoutManager mLayoutManager;
@@ -27,10 +26,8 @@ public class AllTasksFragment extends Fragment {
 
         controller = new MVCController(getActivity());
 //        mLayoutManager = new LinearLayoutManager(getActivity());
-        mAdapter = new RecyclerAdapter(controller.loadDoneTasks(),getActivity());
-
+        mAdapter = new RecyclerAdapter(controller.loadPendingTasks(),getActivity());
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_page, container, false);

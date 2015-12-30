@@ -12,10 +12,10 @@ import android.support.v4.app.FragmentPagerAdapter;
  * Created by David on 12/9/2015.
  */
 public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
-    final int PAGE_COUNT = 2;
-    private String tabTitles[] = new String[] { "WAITING", "ALL TASKS"};
+    final int PAGE_COUNT = 3;
+    private String tabTitles[] = new String[] { "WAITING TASKS", "DONE TASKS", "PENDING TASKS"};
     private Context context;
-    private Fragment[] fragments = new Fragment[] { new WaitingFragment(), new AllTasksFragment()};
+    private Fragment[] fragments = new Fragment[] { new WaitingFragment(), new AllTasksFragment(), new PandingFragment()};
 
     public MyFragmentPagerAdapter(FragmentManager fm, Context context) {
         super(fm);

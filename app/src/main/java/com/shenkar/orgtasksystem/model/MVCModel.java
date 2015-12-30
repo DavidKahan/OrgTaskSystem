@@ -61,8 +61,11 @@ public class MVCModel {
         return c;
     }
     public Cursor loadWaitingTasks() {
-//        final Cursor c = this.database.query(MVCModel.TASKS_TABLE_NAME, new String[]{"description","assignedTeamMember","dueDate"}, null, null, null, null,"dueDate ASC");
         final Cursor c = this.database.query(MVCModel.TASKS_TABLE_NAME, new String[]{"description", "assignedTeamMember", "dueDate", "dueTime", "category", "priority","_id", "status" }, "status=?", new String[] { "WAITING" }, null, null, "dueDate ASC");
+        return c;
+    }
+    public Cursor loadPendingTasks() {
+        final Cursor c = this.database.query(MVCModel.TASKS_TABLE_NAME, new String[]{"description", "assignedTeamMember", "dueDate", "dueTime", "category", "priority","_id", "status" }, "status=?", new String[] { "PENDING" }, null, null, "dueDate ASC");
         return c;
     }
 

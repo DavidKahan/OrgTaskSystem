@@ -17,7 +17,7 @@ public class WaitingFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
+//    private RecyclerView.LayoutManager mLayoutManager;
     MVCController controller;
 
     @Override
@@ -25,7 +25,7 @@ public class WaitingFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         controller = new MVCController(getActivity());
-        mLayoutManager = new LinearLayoutManager(getActivity());
+//        mLayoutManager = new LinearLayoutManager(getActivity());
         mAdapter = new RecyclerAdapter(controller.loadWaitingTasks(),getActivity());
     }
     @Override
@@ -33,7 +33,7 @@ public class WaitingFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_page, container, false);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerList);
         mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mAdapter);
         return view;
     }

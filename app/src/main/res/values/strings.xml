@@ -24,7 +24,7 @@
 
     <string-array name="task_status_array">
         <item>WAITING</item>
-        <item>IN PROGRESS</item>
+        <item>PENDING</item>
         <item>DONE</item>
     </string-array>
     <string name="title_activity_main2">Main2Activity</string>

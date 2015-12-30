@@ -20,11 +20,13 @@ public class MVCController {
     private List<String> members;
     private List<Task> allTasks;
     private List<Task> waitingTasks;
+    private List<Task> pendingTasks;
 
     public MVCController(Context app_context) {
         members = new ArrayList<String>();
         allTasks = new ArrayList<Task>();
         waitingTasks = new ArrayList<Task>();
+        pendingTasks = new ArrayList<Task>();
         model = new MVCModel(app_context);
     }
 
@@ -94,6 +96,29 @@ public class MVCController {
             c.close();
         }
         return waitingTasks;
+    }
+
+    public List<Task> loadPendingTasks() {
+        Cursor c = model.loadPendingTasks();
+        pendingTasks.clear();
+        if (c != null) {
+            c.moveToFirst();
+            while (c.isAfterLast() == false) {
+                Task tmp = new Task();
+                tmp.description = c.getString(0);
+                tmp.assignedTeamMember = c.getString(1);
+                tmp.dueDate = c.getString(2);
+                tmp.dueTime = c.getString(3);
+                tmp.category = c.getString(4);
+                tmp.priority = c.getString(5);
+                tmp.id = c.getString(6);
+                tmp.status = c.getString(7);
+                pendingTasks.add(tmp);
+                c.moveToNext();
+            }
+            c.close();
+        }
+        return pendingTasks;
     }
 
 

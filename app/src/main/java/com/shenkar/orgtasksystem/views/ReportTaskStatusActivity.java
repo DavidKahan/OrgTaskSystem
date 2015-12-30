@@ -51,6 +51,8 @@ public class ReportTaskStatusActivity extends AppCompatActivity {
             taskTime.setText(currentTask.dueTime);
             if (currentTask.status.equals("DONE")) {
                 statusSpinner.setSelection(statusAdapter.getPosition("DONE"));
+            } else if (currentTask.status.equals("PENDING")) {
+                statusSpinner.setSelection(statusAdapter.getPosition("PENDING"));
             }
         }
 

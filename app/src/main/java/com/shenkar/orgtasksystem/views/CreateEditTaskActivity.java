@@ -41,10 +41,8 @@ public class CreateEditTaskActivity extends AppCompatActivity implements
         memberSpinner.setOnItemSelectedListener(this);
         loadSpinnerData();
 
-
         this.tvDate = (TextView) findViewById(R.id.tvDate);
         this.tvTime = (TextView) findViewById(R.id.tvTime);
-        //this.assignedTeamMemberEmail = (EditText) findViewById(R.id.assignedTeamMemberEmail);
         this.taskDescription = (EditText) findViewById(R.id.taskDescription);
         this.radioCategory = (RadioButton) findViewById(R.id.radio_general);
         this.radioCategory.setChecked(true);
