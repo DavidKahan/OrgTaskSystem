@@ -126,6 +126,7 @@ public class MVCController {
         final ContentValues data = new ContentValues();
         data.put("email", member.email);
         data.put("password", member.password);
+        data.put("type", member.type);
         model.addMember(data);
     }
 

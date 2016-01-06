@@ -15,6 +15,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.parse.Parse;
+import com.parse.ParseObject;
 import com.shenkar.orgtasksystem.R;
 import com.shenkar.orgtasksystem.model.Member;
 import com.shenkar.orgtasksystem.controller.MVCController;
@@ -22,10 +24,10 @@ import com.shenkar.orgtasksystem.controller.MVCController;
 import java.util.List;
 
 public class CreateTeamActivity extends AppCompatActivity {
+    private static final int TYPE_MANAGER = 0;
+    private static final int TYPE_TEAM_MEMBER = 1;
     static final int EMAIL_REQUEST = 1;
-    private EditText teamName;
-    private EditText memberEmail;
-    private EditText memberPass;
+    private EditText teamName,memberEmail,memberPass ;
     private Button btNewMem;
     private ListView lvEmails;
     private MVCController controller;
@@ -74,6 +76,16 @@ public class CreateTeamActivity extends AppCompatActivity {
             }
         });
         // endregion
+
+//      [Optional] Power your app with Local Datastore. For more info, go to
+//      https://parse.com/docs/android/guide#local-datastore//
+//      Parse.enableLocalDatastore(this);
+
+
+
+//        ParseObject testObject = new ParseObject("TestObject");
+//        testObject.put("foo", "bar");
+//        testObject.saveInBackground();
     }
 
     private void populateEmails() {
@@ -93,6 +105,7 @@ public class CreateTeamActivity extends AppCompatActivity {
     public void handleNewMember(View view){
         this.addedMember.email = memberEmail.getText().toString();
         this.addedMember.password = memberPass.getText().toString();
+        this.addedMember.type = TYPE_TEAM_MEMBER ;
         CreateTeamActivity.this.controller.addMember(this.addedMember);
         CreateTeamActivity.this.populateEmails();
         memberEmail.setText("");

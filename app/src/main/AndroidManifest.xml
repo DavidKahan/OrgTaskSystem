@@ -2,14 +2,23 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.shenkar.orgtasksystem">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
+
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <uses-library android:name="com.google.android.maps" />
-
+        <!--<uses-library android:name="com.google.android.maps" />-->
+        <!--<meta-data-->
+            <!--android:name="com.parse.APPLICATION_ID"-->
+            <!--android:value="irUzywS69MpTb5AXjCsamv3vUr7Oh39xzkZJzkto" />-->
+        <!--<meta-data-->
+            <!--android:name="com.parse.CLIENT_KEY"-->
+            <!--android:value="rTbKss08HgSA1zrhmSCVPPsn989IlaJsmK1OWRNY" />-->
         <activity
             android:name=".views.SplashActivity"
             android:label="@string/ots">
@@ -17,16 +26,17 @@
         <activity
             android:name=".views.LoginActivity"
             android:label="@string/app_name">
-        </activity>
-        <activity
-            android:name=".views.CreateTeamActivity"
-            android:label="@string/title_activity_create_team"
-            android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".views.CreateTeamActivity"
+            android:label="@string/title_activity_create_team"
+            android:theme="@style/AppTheme.NoActionBar" >
+
 
         </activity>
         <activity

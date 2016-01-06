@@ -75,6 +75,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter <RecyclerAdapter.MyVie
 
         public MyViewHolder(View itemView) {
             super(itemView);
+            itemView.setClickable(true);
             taskView = itemView;
             description = (TextView) itemView.findViewById(R.id.taskDescription);
             memberEmail= (TextView) itemView.findViewById(R.id.taskAssignedMember);

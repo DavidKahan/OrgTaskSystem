@@ -8,4 +8,5 @@ import java.io.Serializable;
 public class Member implements Serializable {
     public String email;
     public String password;
+    public int type;
 }
