@@ -6,23 +6,22 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <!--<uses-library android:name="com.google.android.maps" />-->
-        <!--<meta-data-->
-            <!--android:name="com.parse.APPLICATION_ID"-->
-            <!--android:value="irUzywS69MpTb5AXjCsamv3vUr7Oh39xzkZJzkto" />-->
-        <!--<meta-data-->
-            <!--android:name="com.parse.CLIENT_KEY"-->
-            <!--android:value="rTbKss08HgSA1zrhmSCVPPsn989IlaJsmK1OWRNY" />-->
+
+        <!-- <uses-library android:name="com.google.android.maps" /> -->
+        <!-- <meta-data -->
+        <!-- android:name="com.parse.APPLICATION_ID" -->
+        <!-- android:value="irUzywS69MpTb5AXjCsamv3vUr7Oh39xzkZJzkto" /> -->
+        <!-- <meta-data -->
+        <!-- android:name="com.parse.CLIENT_KEY" -->
+        <!-- android:value="rTbKss08HgSA1zrhmSCVPPsn989IlaJsmK1OWRNY" /> -->
         <activity
             android:name=".views.SplashActivity"
-            android:label="@string/ots">
-        </activity>
+            android:label="@string/ots"></activity>
         <activity
             android:name=".views.LoginActivity"
             android:label="@string/app_name">
@@ -35,25 +34,20 @@
         <activity
             android:name=".views.CreateTeamActivity"
             android:label="@string/title_activity_create_team"
-            android:theme="@style/AppTheme.NoActionBar" >
-
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".views.CreateEditTaskActivity"
             android:label="@string/title_activity_create_edit_task"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".views.ReportTaskStatusActivity"
             android:label="@string/title_activity_report_task_status"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".views.MainActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".views.TeamNameActivity"></activity>
     </application>
 
 </manifest>

@@ -27,7 +27,7 @@ public class CreateTeamActivity extends AppCompatActivity {
     private static final int TYPE_MANAGER = 0;
     private static final int TYPE_TEAM_MEMBER = 1;
     static final int EMAIL_REQUEST = 1;
-    private EditText teamName,memberEmail,memberPass ;
+    private EditText memberName, memberEmail, memberPass ;
     private Button btNewMem;
     private ListView lvEmails;
     private MVCController controller;
@@ -40,8 +40,7 @@ public class CreateTeamActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_team);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        this.teamName = (EditText) this.findViewById(R.id.teamName);
+        this.memberName = (EditText) this.findViewById(R.id.memberName);
         this.memberEmail = (EditText) this.findViewById(R.id.memberEmail);
         this.memberPass = (EditText) this.findViewById(R.id.memberPass);
         this.btNewMem = (Button) this.findViewById(R.id.btNewMem);
@@ -76,16 +75,6 @@ public class CreateTeamActivity extends AppCompatActivity {
             }
         });
         // endregion
-
-//      [Optional] Power your app with Local Datastore. For more info, go to
-//      https://parse.com/docs/android/guide#local-datastore//
-//      Parse.enableLocalDatastore(this);
-
-
-
-//        ParseObject testObject = new ParseObject("TestObject");
-//        testObject.put("foo", "bar");
-//        testObject.saveInBackground();
     }
 
     private void populateEmails() {
@@ -103,6 +92,7 @@ public class CreateTeamActivity extends AppCompatActivity {
     }
 
     public void handleNewMember(View view){
+        this.addedMember.name = memberName.getText().toString();
         this.addedMember.email = memberEmail.getText().toString();
         this.addedMember.password = memberPass.getText().toString();
         this.addedMember.type = TYPE_TEAM_MEMBER ;

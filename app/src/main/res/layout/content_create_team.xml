@@ -9,23 +9,23 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_create_team" tools:context=".views.CreateTeamActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Team Name:"
-        android:id="@+id/textView"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+        <!--android:text="Team Name:"-->
+        <!--android:id="@+id/textView"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_alignParentStart="true" />-->
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/teamName"
-        android:layout_below="@+id/textView"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:hint="Enter team name" />
+    <!--<EditText-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/teamName"-->
+        <!--android:layout_below="@+id/textView"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:hint="Enter team name" />-->
 
     <TextView
         android:layout_width="wrap_content"
@@ -41,8 +41,18 @@
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
         android:ems="10"
-        android:id="@+id/memberEmail"
+        android:id="@+id/memberName"
         android:layout_below="@+id/textView2"
+        android:layout_alignParentStart="true"
+        android:hint="Russell Westbrook" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:ems="10"
+        android:id="@+id/memberEmail"
+        android:layout_below="@+id/memberName"
         android:layout_alignParentStart="true"
         android:hint="member@gmail.com" />
 
@@ -61,16 +71,17 @@
         android:layout_height="wrap_content"
         android:text="@string/add"
         android:id="@+id/btNewMem"
-        android:layout_alignBottom="@+id/memberPass"
-        android:layout_alignParentEnd="true"
-        android:onClick="handleNewMember"/>
+        android:onClick="handleNewMember"
+        android:layout_below="@+id/memberPass"
+        android:layout_alignParentStart="true" />
 
 
     <ListView
         android:id="@+id/lvEmails"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/btNewMem"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/memberPass"></ListView>
+        android:layout_marginTop="20dp"></ListView>
 
 </RelativeLayout>

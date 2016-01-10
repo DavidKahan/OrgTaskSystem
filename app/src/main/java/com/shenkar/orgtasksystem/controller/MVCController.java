@@ -127,7 +127,7 @@ public class MVCController {
         data.put("email", member.email);
         data.put("password", member.password);
         data.put("type", member.type);
-        model.addMember(data);
+        model.addMember(data, member);
     }
 
     public void addTask(Task task) {

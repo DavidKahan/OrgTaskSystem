@@ -5,6 +5,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
+
+import com.parse.LogInCallback;
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseUser;
+import com.parse.SignUpCallback;
+import com.shenkar.orgtasksystem.views.CreateTeamActivity;
 
 
 /**
@@ -49,8 +57,44 @@ public class MVCModel {
         final Cursor c = this.database.query(MVCModel.MEMBERS_TABLE_NAME, new String[]{"email"}, null, null, null, null, null);
         return c;
     }
-    public void addMember(ContentValues data) {
+    public void addMember(ContentValues data, final Member member) {
         this.database.insert(MVCModel.MEMBERS_TABLE_NAME, null, data);
+
+        //Create new team member
+        ParseUser user = new ParseUser();
+        user.setUsername(member.name);
+        user.setPassword(member.password);
+        user.setEmail(member.email);
+        user.put("type", String.valueOf(member.type));
+
+        //Save current parse user session
+        final String session = ParseUser.getCurrentUser().getSessionToken();
+
+        user.signUpInBackground(new SignUpCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    ParseUser.logInInBackground(member.name, member.password, new LogInCallback() {
+                        @Override
+                        public void done(ParseUser parseUser, ParseException e) {
+                            ParseUser.becomeInBackground(session, new LogInCallback() {
+                                @Override
+                                public void done(ParseUser parseUser, ParseException e) {
+                                    if (parseUser != null) {
+                                        // The current user is now set to user.
+                                    } else {
+                                        // The token could not be validated.
+                                    }
+                                }
+                            });
+                        }
+                    });
+
+                } else {
+                    // Sighup failed. Look at the ParseException to see what happened.
+                }
+            }
+        });
     }
     public void addTask(ContentValues data) {
         this.database.insert(MVCModel.TASKS_TABLE_NAME, null, data);
