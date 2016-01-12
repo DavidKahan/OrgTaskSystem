@@ -17,16 +17,16 @@ import com.shenkar.orgtasksystem.controller.MVCController;
 public class WaitingFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
-//    private RecyclerView.LayoutManager mLayoutManager;
     MVCController controller;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         controller = new MVCController(getActivity());
-//        mLayoutManager = new LinearLayoutManager(getActivity());
+        MainActivity activity = (MainActivity) getActivity();
+        String memberName = activity.getMemberName();
         try {
-            mAdapter = new RecyclerAdapter(controller.loadWaitingTasks(),getActivity());
+            mAdapter = new RecyclerAdapter(controller.loadWaitingTasks(memberName),getActivity());
         } catch (ParseException e) {
             e.printStackTrace();
         }

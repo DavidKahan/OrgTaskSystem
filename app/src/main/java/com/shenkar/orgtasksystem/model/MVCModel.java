@@ -124,11 +124,14 @@ public class MVCModel {
         parseTask.saveInBackground();
     }
 
-    public List<Task> loadDoneTasks() throws ParseException {
+    public List<Task> loadDoneTasks(String memberName) throws ParseException {
         final Cursor c = this.database.query(MVCModel.TASKS_TABLE_NAME, new String[]{"description", "assignedTeamMember", "dueDate", "dueTime", "category", "priority", "_id", "status"}, "status=?", new String[]{"DONE"}, null, null, "dueDate ASC");
 //        return c;
         ParseQuery<ParseObject> query = ParseQuery.getQuery("MemberTask");
         query.whereEqualTo("status", "DONE");
+        if (memberName != null) {
+            query.whereEqualTo("assignedTeamMember", memberName);
+        }
         List<ParseObject> results = query.find();
         for (ParseObject object : results){
             Task myObject = new Task();
@@ -148,12 +151,15 @@ public class MVCModel {
         return doneTasks;
     }
 
-    public List<Task> loadWaitingTasks() throws ParseException {
+    public List<Task> loadWaitingTasks(String memberName) throws ParseException {
         //final Cursor c = this.database.query(MVCModel.TASKS_TABLE_NAME, new String[]{"description", "assignedTeamMember", "dueDate", "dueTime", "category", "priority","_id", "status" }, "status=?", new String[] { "WAITING" }, null, null, "dueDate ASC");
         //return c;
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("MemberTask");
         query.whereEqualTo("status", "WAITING");
+        if (memberName != null) {
+            query.whereEqualTo("assignedTeamMember", memberName);
+        }
         List<ParseObject> results = query.find();
         for (ParseObject object : results){
             Task myObject = new Task();
@@ -199,11 +205,14 @@ public class MVCModel {
 //        return waitingTasks;
     }
 
-    public List<Task> loadPendingTasks() throws ParseException {
+    public List<Task> loadPendingTasks(String memberName) throws ParseException {
         //final Cursor c = this.database.query(MVCModel.TASKS_TABLE_NAME, new String[]{"description", "assignedTeamMember", "dueDate", "dueTime", "category", "priority","_id", "status" }, "status=?", new String[] { "PENDING" }, null, null, "dueDate ASC");
         //return c;
         ParseQuery<ParseObject> query = ParseQuery.getQuery("MemberTask");
         query.whereEqualTo("status", "PENDING");
+        if (memberName != null) {
+            query.whereEqualTo("assignedTeamMember", memberName);
+        }
         List<ParseObject> results = query.find();
         for (ParseObject object : results){
             Task myObject = new Task();

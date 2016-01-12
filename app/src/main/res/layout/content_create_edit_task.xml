@@ -61,6 +61,7 @@
                 <RadioButton android:id="@+id/radio_computers"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+
                     android:text="@string/computers"
                     android:onClick="onCategoryRadioButtonClicked"/>
                 <RadioButton android:id="@+id/radio_general"

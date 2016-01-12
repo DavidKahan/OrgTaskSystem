@@ -26,9 +26,10 @@ public class DoneFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         controller = new MVCController(getActivity());
-//        mLayoutManager = new LinearLayoutManager(getActivity());
+        MainActivity activity = (MainActivity) getActivity();
+        String memberName = activity.getMemberName();
         try {
-            mAdapter = new RecyclerAdapter(controller.loadDoneTasks(),getActivity());
+            mAdapter = new RecyclerAdapter(controller.loadDoneTasks(memberName),getActivity());
         } catch (ParseException e) {
             e.printStackTrace();
         }

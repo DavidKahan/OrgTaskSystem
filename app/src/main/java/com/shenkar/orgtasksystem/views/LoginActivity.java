@@ -59,9 +59,6 @@ public class LoginActivity extends Activity {
                         user.setPassword(password);
                         user.setEmail(email);
                         user.put("type","0");
-                        // other fields can be set just like with ParseObject
-                        //user.put("phone", "650-253-0000");
-
                         //Sign him up
                         user.signUpInBackground(new SignUpCallback() {
                             public void done(ParseException e) {
@@ -72,6 +69,7 @@ public class LoginActivity extends Activity {
                                             if (user != null) {
                                                 //The user is logged in.
                                                 Intent intent = new Intent(LoginActivity.this, CreateTeamActivity.class);
+                                                //intent.putExtra("username", name);
                                                 startActivity(intent);
                                             } else {
                                                 // Login failed. Look at the ParseException to see what happened.
@@ -83,20 +81,17 @@ public class LoginActivity extends Activity {
                         });
                     } else {
                         //user is regular team member and is already signed up
-                        ParseUser user = new ParseUser();
-                        user.setUsername(name);
-                        user.setPassword(password);
-                        user.setEmail(email);
-
-                        // other fields can be set just like with ParseObject
-                        //user.put("phone", "650-253-0000");
-
+//                        ParseUser user = new ParseUser();
+//                        user.setUsername(name);
+//                        user.setPassword(password);
+//                        user.setEmail(email);
                         //Log him in
                         ParseUser.logInInBackground(memberName.getText().toString(), memberPass.getText().toString(), new LogInCallback() {
                             public void done(ParseUser user, ParseException e) {
                                 if (user != null) {
                                     //The user is logged in.
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                    intent.putExtra("username", name);
                                     startActivity(intent);
                                 } else {
                                     // Login failed. Look at the ParseException to see what happened.

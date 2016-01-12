@@ -19,74 +19,80 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true">
-        <LinearLayout
+
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-            <include layout="@layout/nav_header_main" />
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="Logout/Login"-->
-                <!--android:id="@+id/textView7"-->
-                <!--android:layout_marginLeft="20dp"-->
-                <!--android:layout_marginTop="10dp"-->
-                <!--android:textColor="#000000"/>-->
+            android:layout_height="wrap_content">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Manage Team"
-                android:id="@+id/textView6"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="10dp"
-                android:textColor="#000000" />
-
-            <ListView
-                android:layout_marginLeft="20dp"
-                android:id="@+id/left_drawer"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <android.support.v7.widget.SwitchCompat
-                android:id="@+id/loggedSwitch"
-                android:checked="true"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:text="Logout/Login  "
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textOff="Logout"
-                android:textOn="Login"/>
+                android:orientation="vertical">
+                <include layout="@layout/nav_header_main" />
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="Logout/Login"-->
+                    <!--android:id="@+id/textView7"-->
+                    <!--android:layout_marginLeft="20dp"-->
+                    <!--android:layout_marginTop="10dp"-->
+                    <!--android:textColor="#000000"/>-->
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Manage Team"
+                    android:id="@+id/textView6"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:textColor="#000000" />
+
+                <ListView
+                    android:layout_marginLeft="20dp"
+                    android:id="@+id/left_drawer"
+                    android:layout_width="match_parent"
+                    android:layout_height="240dp" />
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/loggedSwitch"
+                    android:checked="true"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="Logout/Login  "
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textOff="Logout"
+                    android:textOn="Login"/>
 
 
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="About"
-                android:id="@+id/textView8"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="10dp"
-                android:textColor="#000000"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="OTS 1.0"
-                android:id="@+id/textView9"
-                android:layout_marginLeft="40dp"
-                android:layout_marginTop="10dp"
-                android:textColor="#000000" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hadas Nadan  David Kahan"
-                android:id="@+id/textView10"
-                android:layout_marginLeft="40dp"
-                android:layout_marginTop="10dp"
-                android:textColor="#000000"/>
-        </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="About"
+                    android:id="@+id/textView8"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:textColor="#000000"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="OTS 1.0"
+                    android:id="@+id/textView9"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginTop="10dp"
+                    android:textColor="#000000" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hadas Nadan  David Kahan"
+                    android:id="@+id/textView10"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginTop="10dp"
+                    android:textColor="#000000"/>
+            </LinearLayout>
+        </ScrollView>
     </android.support.design.widget.NavigationView>
 
 </android.support.v4.widget.DrawerLayout>

@@ -38,9 +38,9 @@ public class MainActivity extends AppCompatActivity  {
     public Intent intent;
     private MenuItem mSyncMenuItem = null;
     private SwitchCompat loggedSwitch;
-
     private ListView mDrawerList;
     private List<String> members;
+    private String memberName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,11 +50,12 @@ public class MainActivity extends AppCompatActivity  {
 
         this.controller = new MVCController(this);
 
-//        intent = getIntent();
-//        if (intent.hasExtra("CurrentTask")) {
-//            this.addedTask = (Task) intent.getSerializableExtra("CurrentTask");
-//            MainActivity.this.controller.addTask(this.addedTask);
-//        }
+        intent = getIntent();
+        if (intent.hasExtra("username")) {
+            memberName = intent.getStringExtra("username");
+        } else {
+            memberName = null;
+        }
 
         //region Pager and Tabs
         // Get the ViewPager and set it's PagerAdapter so that it can display items
@@ -162,6 +163,10 @@ public class MainActivity extends AppCompatActivity  {
             syncAnimation.setRepeatCount(Animation.INFINITE);
             syncImageView.startAnimation(syncAnimation);
         }
+    }
+
+    public String getMemberName() {
+        return memberName;
     }
 
 //    @SuppressWarnings("StatementWithEmptyBody")

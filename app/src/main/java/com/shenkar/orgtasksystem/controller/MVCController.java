@@ -54,11 +54,11 @@ public class MVCController {
         return model.loadAllMembers();
     }
 
-    public List<Task> loadDoneTasks() throws ParseException {
-        return model.loadDoneTasks();
+    public List<Task> loadDoneTasks(String memberName) throws ParseException {
+        return model.loadDoneTasks(memberName);
     }
 
-    public List<Task> loadWaitingTasks() throws ParseException {
+    public List<Task> loadWaitingTasks(String memberName) throws ParseException {
 //        Cursor c = model.loadWaitingTasks();
 //        waitingTasks.clear();
 //        if (c != null) {
@@ -79,11 +79,11 @@ public class MVCController {
 //            c.close();
 //        }
 //        return waitingTasks;
-        return model.loadWaitingTasks();
+        return model.loadWaitingTasks(memberName);
     }
 
-    public List<Task> loadPendingTasks() throws ParseException {
-        return model.loadPendingTasks();
+    public List<Task> loadPendingTasks(String memberName) throws ParseException {
+        return model.loadPendingTasks(memberName);
     }
 
 
