@@ -103,8 +103,9 @@ public class MVCController {
         data.put("assignedTeamMember", task.assignedTeamMember);
         data.put("dueDate", task.dueDate);
         data.put("dueTime", task.dueTime);
-        data.put("longitude", task.longitude);
-        data.put("latitude", task.latitude);
+        data.put("location", task.location);
+//        data.put("longitude", task.longitude);
+//        data.put("latitude", task.latitude);
         data.put("status", task.status);
         model.addTask(data, task);
     }

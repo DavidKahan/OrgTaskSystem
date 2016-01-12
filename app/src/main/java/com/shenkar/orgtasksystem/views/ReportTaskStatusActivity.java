@@ -25,7 +25,7 @@ public class ReportTaskStatusActivity extends AppCompatActivity {
     private MVCController controller;
     public Task currentTask;
     public Intent intent;
-    TextView taskCategory, taskPriority, taskTime, taskDate;
+    TextView taskLocation, taskCategory, taskPriority, taskTime, taskDate;
     Spinner statusSpinner;
     String statusLabel;
 
@@ -37,6 +37,7 @@ public class ReportTaskStatusActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         this.controller = new MVCController(this);
+        this.taskLocation = (TextView) findViewById(R.id.reportTaskLocation);
         this.taskCategory = (TextView) findViewById(R.id.taskCategory);
         this.taskPriority = (TextView) findViewById(R.id.taskPriority);
         this.taskTime = (TextView) findViewById(R.id.taskTime);
@@ -50,6 +51,7 @@ public class ReportTaskStatusActivity extends AppCompatActivity {
         if (intent != null) {
             this.currentTask = new Task();
             this.currentTask = (Task) intent.getSerializableExtra("CurrentTask");
+            taskLocation.setText(currentTask.location);
             taskCategory.setText(currentTask.category);
             taskPriority.setText(currentTask.priority);
             taskDate.setText(currentTask.dueDate);

@@ -108,7 +108,7 @@ public class MVCModel {
 
     public void addTask(ContentValues data, Task task) {
         //Insert to local
-        this.database.insert(MVCModel.TASKS_TABLE_NAME, null, data);
+        //this.database.insert(MVCModel.TASKS_TABLE_NAME, null, data);
 
         //Send to Parse
         ParseObject parseTask = new ParseObject("MemberTask");
@@ -118,14 +118,15 @@ public class MVCModel {
         parseTask.put("assignedTeamMember", task.assignedTeamMember);
         parseTask.put("dueDate", task.dueDate);
         parseTask.put("dueTime", task.dueTime);
-        parseTask.put("longitude", task.longitude);
-        parseTask.put("latitude", task.latitude);
+        parseTask.put("location", task.location);
+//        parseTask.put("longitude", task.longitude);
+//        parseTask.put("latitude", task.latitude);
         parseTask.put("status", task.status);
         parseTask.saveInBackground();
     }
 
     public List<Task> loadDoneTasks(String memberName) throws ParseException {
-        final Cursor c = this.database.query(MVCModel.TASKS_TABLE_NAME, new String[]{"description", "assignedTeamMember", "dueDate", "dueTime", "category", "priority", "_id", "status"}, "status=?", new String[]{"DONE"}, null, null, "dueDate ASC");
+//        final Cursor c = this.database.query(MVCModel.TASKS_TABLE_NAME, new String[]{"description", "assignedTeamMember", "dueDate", "dueTime", "category", "priority", "_id", "status"}, "status=?", new String[]{"DONE"}, null, null, "dueDate ASC");
 //        return c;
         ParseQuery<ParseObject> query = ParseQuery.getQuery("MemberTask");
         query.whereEqualTo("status", "DONE");
@@ -142,8 +143,9 @@ public class MVCModel {
             myObject.status = object.getString("status");
             myObject.category = object.getString("category");
             myObject.dueDate = object.getString("dueDate");
-            myObject.latitude= object.getString("latitude");
-            myObject.longitude = object.getString("longitude");
+            myObject.location = object.getString("location");
+//            myObject.latitude= object.getString("latitude");
+//            myObject.longitude = object.getString("longitude");
             myObject.priority = object.getString("priority");
             doneTasks.add(myObject);
             Log.d("score", "Retrieved " + results.size() + " scores");
@@ -170,8 +172,9 @@ public class MVCModel {
             myObject.status = object.getString("status");
             myObject.category = object.getString("category");
             myObject.dueDate = object.getString("dueDate");
-            myObject.latitude= object.getString("latitude");
-            myObject.longitude = object.getString("longitude");
+            myObject.location = object.getString("location");
+//            myObject.latitude= object.getString("latitude");
+//            myObject.longitude = object.getString("longitude");
             myObject.priority = object.getString("priority");
             waitingTasks.add(myObject);
             Log.d("score", "Retrieved " + results.size() + " scores");
@@ -223,8 +226,9 @@ public class MVCModel {
             myObject.status = object.getString("status");
             myObject.category = object.getString("category");
             myObject.dueDate = object.getString("dueDate");
-            myObject.latitude= object.getString("latitude");
-            myObject.longitude = object.getString("longitude");
+            myObject.location = object.getString("location");
+//            myObject.latitude= object.getString("latitude");
+//            myObject.longitude = object.getString("longitude");
             myObject.priority = object.getString("priority");
             pendingTasks.add(myObject);
             Log.d("score", "Retrieved " + results.size() + " scores");

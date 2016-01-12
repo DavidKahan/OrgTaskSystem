@@ -27,7 +27,7 @@ public class CreateEditTaskActivity extends AppCompatActivity implements
     private MVCController controller;
     Task currentTask = new Task();
     TextView tvDate, tvTime;
-    EditText assignedTeamMemberEmail, taskDescription;
+    EditText taskLocation, taskDescription;
     RadioButton radioCategory, radioPriority;
     Spinner memberSpinner;
     @Override
@@ -49,6 +49,7 @@ public class CreateEditTaskActivity extends AppCompatActivity implements
         this.tvDate = (TextView) findViewById(R.id.tvDate);
         this.tvTime = (TextView) findViewById(R.id.tvTime);
         this.taskDescription = (EditText) findViewById(R.id.taskDescription);
+        this.taskLocation = (EditText) findViewById(R.id.taskLocation);
         this.radioCategory = (RadioButton) findViewById(R.id.radio_general);
         this.radioCategory.setChecked(true);
         this.currentTask.category = "general";
@@ -128,9 +129,9 @@ public class CreateEditTaskActivity extends AppCompatActivity implements
         this.currentTask.dueTime = tvTime.getText().toString();
         this.currentTask.assignedTeamMember = memberSpinner.getSelectedItem().toString();
         this.currentTask.description = taskDescription.getText().toString();
-
-        this.currentTask.longitude = "234235";
-        this.currentTask.latitude = "234235";
+        this.currentTask.location = taskLocation.getText().toString();
+//        this.currentTask.longitude = "234235";
+//        this.currentTask.latitude = "234235";
         this.currentTask.status = "WAITING";
 
         CreateEditTaskActivity.this.controller.addTask(this.currentTask);

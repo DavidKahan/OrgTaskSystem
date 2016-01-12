@@ -29,12 +29,9 @@
                 android:id="@+id/textDescription" />
 
             <EditText
-                android:inputType="textEmailAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/taskDescription"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="true"
                 android:hint="Tap and enter task description" />
 
             <TextView
@@ -61,7 +58,6 @@
                 <RadioButton android:id="@+id/radio_computers"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
                     android:text="@string/computers"
                     android:onClick="onCategoryRadioButtonClicked"/>
                 <RadioButton android:id="@+id/radio_general"
@@ -106,7 +102,11 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Task Location:"
                 android:id="@+id/textView5" />
-
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/taskLocation"
+                android:hint="Tap and enter task location" />
             <LinearLayout
                 android:layout_marginTop="20dp"
                 android:layout_width="match_parent"

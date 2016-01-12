@@ -77,7 +77,7 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="Task Location"
-                    android:id="@+id/taskLocation" />
+                    android:id="@+id/reportTaskLocation" />
             </LinearLayout>
             <LinearLayout
                 android:layout_marginTop="10dp"
