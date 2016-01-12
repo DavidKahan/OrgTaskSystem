@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.parse.ParseException;
 import com.shenkar.orgtasksystem.R;
 import com.shenkar.orgtasksystem.model.Task;
 import com.shenkar.orgtasksystem.controller.MVCController;
@@ -79,7 +80,11 @@ public class MainActivity extends AppCompatActivity  {
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
-        members = this.controller.getMembers();
+        try {
+            members = this.controller.getMembers();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         this.mDrawerList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, members.toArray(new String[]{})));
 
 

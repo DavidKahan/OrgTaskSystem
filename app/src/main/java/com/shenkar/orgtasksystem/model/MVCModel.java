@@ -26,6 +26,7 @@ import java.util.List;
  * Created by David on 11/23/2015.
  */
 public class MVCModel {
+    private List<String> members = new ArrayList<String>();
     private List<Task> doneTasks = new ArrayList<Task>();
     private List<Task> waitingTasks = new ArrayList<Task>();
     private List<Task> pendingTasks = new ArrayList<Task>();
@@ -63,11 +64,6 @@ public class MVCModel {
 
     public void deleteMember(final String field_params) {
         this.database.delete(MVCModel.MEMBERS_TABLE_NAME, field_params, null);
-    }
-
-    public Cursor loadAllMembers() {
-        final Cursor c = this.database.query(MVCModel.MEMBERS_TABLE_NAME, new String[]{"email"}, null, null, null, null, null);
-        return c;
     }
 
     public void addMember(ContentValues data, final Member member) {
@@ -204,10 +200,10 @@ public class MVCModel {
     }
 
     public List<Task> loadPendingTasks() throws ParseException {
-        final Cursor c = this.database.query(MVCModel.TASKS_TABLE_NAME, new String[]{"description", "assignedTeamMember", "dueDate", "dueTime", "category", "priority","_id", "status" }, "status=?", new String[] { "PENDING" }, null, null, "dueDate ASC");
+        //final Cursor c = this.database.query(MVCModel.TASKS_TABLE_NAME, new String[]{"description", "assignedTeamMember", "dueDate", "dueTime", "category", "priority","_id", "status" }, "status=?", new String[] { "PENDING" }, null, null, "dueDate ASC");
         //return c;
         ParseQuery<ParseObject> query = ParseQuery.getQuery("MemberTask");
-        query.whereEqualTo("status", "DONE");
+        query.whereEqualTo("status", "PENDING");
         List<ParseObject> results = query.find();
         for (ParseObject object : results){
             Task myObject = new Task();
@@ -225,6 +221,19 @@ public class MVCModel {
             Log.d("score", "Retrieved " + results.size() + " scores");
         }
         return pendingTasks;
+    }
+
+    public List<String> loadAllMembers() throws ParseException {
+//        final Cursor c = this.database.query(MVCModel.MEMBERS_TABLE_NAME, new String[]{"email"}, null, null, null, null, null);
+//        return c;
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        List<ParseUser> results = query.find();
+        for (ParseUser member : results){
+            String myMemberName = member.getString("username");
+            members.add(myMemberName);
+            Log.d("members", "Retrieved " + results.size() + " members");
+        }
+        return members;
     }
 
     public void deleteTask(final String field_params) {

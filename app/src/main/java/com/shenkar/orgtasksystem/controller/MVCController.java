@@ -39,18 +39,19 @@ public class MVCController {
         model.deleteMember(null);
     }
 
-    public List<String> getMembers() {
-        Cursor c = model.loadAllMembers();
-        members.clear();
-        if (c != null) {
-            c.moveToFirst();
-            while (c.isAfterLast() == false) {
-                members.add(c.getString(0));
-                c.moveToNext();
-            }
-            c.close();
-        }
-        return members;
+    public List<String> getMembers() throws ParseException {
+//        Cursor c = model.loadAllMembers();
+//        members.clear();
+//        if (c != null) {
+//            c.moveToFirst();
+//            while (c.isAfterLast() == false) {
+//                members.add(c.getString(0));
+//                c.moveToNext();
+//            }
+//            c.close();
+//        }
+//        return members;
+        return model.loadAllMembers();
     }
 
     public List<Task> loadDoneTasks() throws ParseException {

@@ -14,6 +14,7 @@ import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.parse.ParseException;
 import com.shenkar.orgtasksystem.R;
 import com.shenkar.orgtasksystem.model.Task;
 import com.shenkar.orgtasksystem.controller.MVCController;
@@ -39,7 +40,11 @@ public class CreateEditTaskActivity extends AppCompatActivity implements
 
         memberSpinner = (Spinner) findViewById(R.id.member_emails_spinner);
         memberSpinner.setOnItemSelectedListener(this);
-        loadSpinnerData();
+        try {
+            loadSpinnerData();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         this.tvDate = (TextView) findViewById(R.id.tvDate);
         this.tvTime = (TextView) findViewById(R.id.tvTime);
@@ -53,7 +58,7 @@ public class CreateEditTaskActivity extends AppCompatActivity implements
         this.currentTask.priority = "normal";
     }
 
-    private void loadSpinnerData() {
+    private void loadSpinnerData() throws ParseException {
         List<String> labels = this.controller.getMembers();
         ArrayAdapter<String> membersAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, labels);

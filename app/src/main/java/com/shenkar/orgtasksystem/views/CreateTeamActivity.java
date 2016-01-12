@@ -16,11 +16,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.parse.Parse;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.shenkar.orgtasksystem.R;
 import com.shenkar.orgtasksystem.model.Member;
 import com.shenkar.orgtasksystem.controller.MVCController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CreateTeamActivity extends AppCompatActivity {
@@ -31,7 +33,7 @@ public class CreateTeamActivity extends AppCompatActivity {
     private Button btNewMem;
     private ListView lvEmails;
     private MVCController controller;
-    private List<String> members;
+    private List<String> members = new ArrayList<String>();
     Member addedMember = new Member();
 
     @Override
@@ -47,7 +49,11 @@ public class CreateTeamActivity extends AppCompatActivity {
         this.lvEmails = (ListView) this.findViewById(R.id.lvEmails);
         this.controller = new MVCController(this);
 
-        this.populateEmails();
+        try {
+            this.populateEmails();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         // region Email Fab
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -77,7 +83,8 @@ public class CreateTeamActivity extends AppCompatActivity {
         // endregion
     }
 
-    private void populateEmails() {
+    private void populateEmails() throws ParseException {
+        members.clear();
         members = this.controller.getMembers();
 
         this.lvEmails.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, members.toArray(new String[]{})));
@@ -86,8 +93,12 @@ public class CreateTeamActivity extends AppCompatActivity {
             public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
                     final TextView v = (TextView) view;
                     CreateTeamActivity.this.controller.deleteMember(v.getText().toString());
+                try {
                     CreateTeamActivity.this.populateEmails();
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
+            }
             });
     }
 
@@ -97,7 +108,12 @@ public class CreateTeamActivity extends AppCompatActivity {
         this.addedMember.password = memberPass.getText().toString();
         this.addedMember.type = TYPE_TEAM_MEMBER ;
         CreateTeamActivity.this.controller.addMember(this.addedMember);
-        CreateTeamActivity.this.populateEmails();
+        try {
+            CreateTeamActivity.this.populateEmails();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        memberName.setText("");
         memberEmail.setText("");
         memberPass.setText("");
     }
