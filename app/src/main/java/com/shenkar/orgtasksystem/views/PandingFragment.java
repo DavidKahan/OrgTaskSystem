@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.parse.ParseException;
 import com.shenkar.orgtasksystem.R;
 import com.shenkar.orgtasksystem.controller.MVCController;
 
@@ -26,7 +27,11 @@ public class PandingFragment extends Fragment {
 
         controller = new MVCController(getActivity());
 //        mLayoutManager = new LinearLayoutManager(getActivity());
-        mAdapter = new RecyclerAdapter(controller.loadPendingTasks(),getActivity());
+        try {
+            mAdapter = new RecyclerAdapter(controller.loadPendingTasks(),getActivity());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

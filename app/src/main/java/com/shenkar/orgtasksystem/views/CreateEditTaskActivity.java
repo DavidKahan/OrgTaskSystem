@@ -121,12 +121,15 @@ public class CreateEditTaskActivity extends AppCompatActivity implements
         //TODO: error handling
         this.currentTask.dueDate = tvDate.getText().toString();
         this.currentTask.dueTime = tvTime.getText().toString();
-        //this.currentTask.assignedTeamMember = assignedTeamMemberEmail.getText().toString();
+//        this.currentTask.assignedTeamMember = assignedTeamMemberEmail.getText().toString();
+        this.currentTask.assignedTeamMember = memberSpinner.getSelectedItem().toString();
         this.currentTask.description = taskDescription.getText().toString();
 
         this.currentTask.longitude = "234235";
         this.currentTask.latitude = "234235";
         this.currentTask.status = "WAITING";
+
+        CreateEditTaskActivity.this.controller.addTask(this.currentTask);
 
         Intent intent = new Intent(CreateEditTaskActivity.this,MainActivity.class);
         intent.putExtra("CurrentTask", currentTask);

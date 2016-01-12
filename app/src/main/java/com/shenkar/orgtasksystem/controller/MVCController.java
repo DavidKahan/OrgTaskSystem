@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
+import com.parse.ParseException;
 import com.shenkar.orgtasksystem.model.MVCModel;
 import com.shenkar.orgtasksystem.model.Member;
 import com.shenkar.orgtasksystem.model.Task;
@@ -18,15 +19,15 @@ import java.util.List;
 public class MVCController {
     private MVCModel model;
     private List<String> members;
-    private List<Task> allTasks;
-    private List<Task> waitingTasks;
-    private List<Task> pendingTasks;
+//    private List<Task> allTasks;
+//    private List<Task> waitingTasks;
+//    private List<Task> pendingTasks;
 
     public MVCController(Context app_context) {
         members = new ArrayList<String>();
-        allTasks = new ArrayList<Task>();
-        waitingTasks = new ArrayList<Task>();
-        pendingTasks = new ArrayList<Task>();
+//        allTasks = new ArrayList<Task>();
+//        waitingTasks = new ArrayList<Task>();
+//        pendingTasks = new ArrayList<Task>();
         model = new MVCModel(app_context);
     }
 
@@ -52,73 +53,36 @@ public class MVCController {
         return members;
     }
 
-    public List<Task> loadDoneTasks() {
-        Cursor c = model.loadDoneTasks();
-        allTasks.clear();
-        if (c != null) {
-            c.moveToFirst();
-            while (c.isAfterLast() == false) {
-                Task tmp = new Task();
-                tmp.description = c.getString(0);
-                tmp.assignedTeamMember = c.getString(1);
-                tmp.dueDate = c.getString(2);
-                tmp.dueTime = c.getString(3);
-                tmp.category = c.getString(4);
-                tmp.priority = c.getString(5);
-                tmp.id = c.getString(6);
-                tmp.status = c.getString(7);
-                allTasks.add(tmp);
-                c.moveToNext();
-            }
-            c.close();
-        }
-        return allTasks;
+    public List<Task> loadDoneTasks() throws ParseException {
+        return model.loadDoneTasks();
     }
 
-    public List<Task> loadWaitingTasks() {
-        Cursor c = model.loadWaitingTasks();
-        waitingTasks.clear();
-        if (c != null) {
-            c.moveToFirst();
-            while (c.isAfterLast() == false) {
-                Task tmp = new Task();
-                tmp.description = c.getString(0);
-                tmp.assignedTeamMember = c.getString(1);
-                tmp.dueDate = c.getString(2);
-                tmp.dueTime = c.getString(3);
-                tmp.category = c.getString(4);
-                tmp.priority = c.getString(5);
-                tmp.id = c.getString(6);
-                tmp.status = c.getString(7);
-                waitingTasks.add(tmp);
-                c.moveToNext();
-            }
-            c.close();
-        }
-        return waitingTasks;
+    public List<Task> loadWaitingTasks() throws ParseException {
+//        Cursor c = model.loadWaitingTasks();
+//        waitingTasks.clear();
+//        if (c != null) {
+//            c.moveToFirst();
+//            while (c.isAfterLast() == false) {
+//                Task tmp = new Task();
+//                tmp.description = c.getString(0);
+//                tmp.assignedTeamMember = c.getString(1);
+//                tmp.dueDate = c.getString(2);
+//                tmp.dueTime = c.getString(3);
+//                tmp.category = c.getString(4);
+//                tmp.priority = c.getString(5);
+//                tmp.id = c.getString(6);
+//                tmp.status = c.getString(7);
+//                waitingTasks.add(tmp);
+//                c.moveToNext();
+//            }
+//            c.close();
+//        }
+//        return waitingTasks;
+        return model.loadWaitingTasks();
     }
 
-    public List<Task> loadPendingTasks() {
-        Cursor c = model.loadPendingTasks();
-        pendingTasks.clear();
-        if (c != null) {
-            c.moveToFirst();
-            while (c.isAfterLast() == false) {
-                Task tmp = new Task();
-                tmp.description = c.getString(0);
-                tmp.assignedTeamMember = c.getString(1);
-                tmp.dueDate = c.getString(2);
-                tmp.dueTime = c.getString(3);
-                tmp.category = c.getString(4);
-                tmp.priority = c.getString(5);
-                tmp.id = c.getString(6);
-                tmp.status = c.getString(7);
-                pendingTasks.add(tmp);
-                c.moveToNext();
-            }
-            c.close();
-        }
-        return pendingTasks;
+    public List<Task> loadPendingTasks() throws ParseException {
+        return model.loadPendingTasks();
     }
 
 
@@ -141,7 +105,7 @@ public class MVCController {
         data.put("longitude", task.longitude);
         data.put("latitude", task.latitude);
         data.put("status", task.status);
-        model.addTask(data);
+        model.addTask(data, task);
     }
 
     public void updateTaskStatusByID(Task task) {

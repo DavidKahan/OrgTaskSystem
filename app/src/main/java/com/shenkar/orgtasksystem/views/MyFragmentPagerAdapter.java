@@ -15,7 +15,7 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
     final int PAGE_COUNT = 3;
     private String tabTitles[] = new String[] { "WAITING TASKS", "DONE TASKS", "PENDING TASKS"};
     private Context context;
-    private Fragment[] fragments = new Fragment[] { new WaitingFragment(), new AllTasksFragment(), new PandingFragment()};
+    private Fragment[] fragments = new Fragment[] { new WaitingFragment(), new DoneFragment(), new PandingFragment()};
 
     public MyFragmentPagerAdapter(FragmentManager fm, Context context) {
         super(fm);

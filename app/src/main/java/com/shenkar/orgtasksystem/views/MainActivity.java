@@ -49,11 +49,12 @@ public class MainActivity extends AppCompatActivity  {
 
         this.controller = new MVCController(this);
 
-        intent = getIntent();
-        if (intent.hasExtra("CurrentTask")) {
-            this.addedTask = (Task) intent.getSerializableExtra("CurrentTask");
-            MainActivity.this.controller.addTask(this.addedTask);
-        }
+//        intent = getIntent();
+//        if (intent.hasExtra("CurrentTask")) {
+//            this.addedTask = (Task) intent.getSerializableExtra("CurrentTask");
+//            MainActivity.this.controller.addTask(this.addedTask);
+//        }
+
         //region Pager and Tabs
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);

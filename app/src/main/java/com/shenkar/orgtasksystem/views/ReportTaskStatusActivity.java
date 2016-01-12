@@ -12,6 +12,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.shenkar.orgtasksystem.R;
 import com.shenkar.orgtasksystem.controller.MVCController;
 import com.shenkar.orgtasksystem.model.Task;
@@ -23,6 +27,7 @@ public class ReportTaskStatusActivity extends AppCompatActivity {
     public Intent intent;
     TextView taskCategory, taskPriority, taskTime, taskDate;
     Spinner statusSpinner;
+    String statusLabel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +66,20 @@ public class ReportTaskStatusActivity extends AppCompatActivity {
         statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String lstatusLabel = parent.getItemAtPosition(position).toString();
-                currentTask.status = lstatusLabel;
+                statusLabel = parent.getItemAtPosition(position).toString();
+                currentTask.status = statusLabel;
+                ParseQuery<ParseObject> query = ParseQuery.getQuery("MemberTask");
+                // Retrieve the object by id
+                query.getInBackground(currentTask.id , new GetCallback<ParseObject>() {
+                    String tmp = currentTask.id;
+                    public void done(ParseObject task, ParseException e) {
+                        if (e == null) {
+                            // Now let's update it with some new data.
+                            task.put("status", statusLabel);
+                            task.saveInBackground();
+                        }
+                    }
+                });
             }
 
             @Override
