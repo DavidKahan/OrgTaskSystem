@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -32,7 +33,6 @@ import com.shenkar.orgtasksystem.controller.MVCController;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity  {
-//    implements NavigationView.OnNavigationItemSelectedListener
     private MVCController controller;
     public Task addedTask = new Task();
     public Intent intent;
@@ -41,14 +41,14 @@ public class MainActivity extends AppCompatActivity  {
     private ListView mDrawerList;
     private List<String> members;
     private String memberName;
+    public RecyclerView.Adapter mWaitingAdapter,mPendingAdapter,mDoneAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        this.controller = new MVCController(this);
 
         intent = getIntent();
         if (intent.hasExtra("username")) {
@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity  {
             memberName = null;
         }
 
+        setUpdatingData();
         //region Pager and Tabs
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
@@ -130,15 +131,26 @@ public class MainActivity extends AppCompatActivity  {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_sync) {
             startSyncAnimation();
-            this.controller = new MVCController(this);
-            //stopSyncAnimation();
+            setUpdatingData();
+            stopSyncAnimation();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    private void stopSyncAnimation() {
+    private void setUpdatingData() {
+        this.controller = new MVCController(this);
+        try {
+            mWaitingAdapter = new RecyclerAdapter(controller.loadWaitingTasks(memberName),this);
+            mPendingAdapter = new RecyclerAdapter(controller.loadPendingTasks(memberName),this);
+            mDoneAdapter = new RecyclerAdapter(controller.loadDoneTasks(memberName),this);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void stopSyncAnimation() {
         if (mSyncMenuItem != null && mSyncMenuItem.getActionView() != null) {
             mSyncMenuItem.getActionView().clearAnimation();
             mSyncMenuItem.setActionView(null);
@@ -160,15 +172,19 @@ public class MainActivity extends AppCompatActivity  {
             mSyncMenuItem.setActionView(syncImageView);
 
             Animation syncAnimation = AnimationUtils.loadAnimation(this, R.anim.sync_animation);
+            //syncAnimation.setDuration(3000);
             syncAnimation.setRepeatCount(Animation.INFINITE);
             syncImageView.startAnimation(syncAnimation);
+
+
         }
+
     }
 
-    public String getMemberName() {
-        return memberName;
+    public void moveToAddMember(View view) {
+        Intent intent = new Intent(MainActivity.this, AddMembersActivity.class);
+        startActivity(intent);
     }
-
 //    @SuppressWarnings("StatementWithEmptyBody")
 //    @Override
 //    public boolean onNavigationItemSelected(MenuItem item) {

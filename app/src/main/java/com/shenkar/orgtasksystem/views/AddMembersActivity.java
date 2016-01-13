@@ -15,9 +15,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.parse.Parse;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.shenkar.orgtasksystem.R;
 import com.shenkar.orgtasksystem.model.Member;
 import com.shenkar.orgtasksystem.controller.MVCController;
@@ -25,7 +23,7 @@ import com.shenkar.orgtasksystem.controller.MVCController;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CreateTeamActivity extends AppCompatActivity {
+public class AddMembersActivity extends AppCompatActivity {
     private static final int TYPE_MANAGER = 0;
     private static final int TYPE_TEAM_MEMBER = 1;
     static final int EMAIL_REQUEST = 1;
@@ -33,7 +31,7 @@ public class CreateTeamActivity extends AppCompatActivity {
     private Button btNewMem;
     private ListView lvEmails;
     private MVCController controller;
-    private List<String> members = new ArrayList<String>();
+    private List<String> members;
     Member addedMember = new Member();
 
     @Override
@@ -84,22 +82,22 @@ public class CreateTeamActivity extends AppCompatActivity {
     }
 
     private void populateEmails() throws ParseException {
-        members.clear();
+        //members.clear();
         members = this.controller.getMembers();
 
         this.lvEmails.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, members.toArray(new String[]{})));
-        this.lvEmails.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
-                    final TextView v = (TextView) view;
-                    CreateTeamActivity.this.controller.deleteMember(v.getText().toString());
-                try {
-                    CreateTeamActivity.this.populateEmails();
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            }
-            });
+//        this.lvEmails.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
+//                    final TextView v = (TextView) view;
+//                    AddMembersActivity.this.controller.deleteMember(v.getText().toString());
+//                try {
+//                    AddMembersActivity.this.populateEmails();
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//            });
     }
 
     public void handleNewMember(View view){
@@ -107,9 +105,9 @@ public class CreateTeamActivity extends AppCompatActivity {
         this.addedMember.email = memberEmail.getText().toString();
         this.addedMember.password = memberPass.getText().toString();
         this.addedMember.type = TYPE_TEAM_MEMBER ;
-        CreateTeamActivity.this.controller.addMember(this.addedMember);
+        AddMembersActivity.this.controller.addMember(this.addedMember);
         try {
-            CreateTeamActivity.this.populateEmails();
+            AddMembersActivity.this.populateEmails();
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -141,7 +139,7 @@ public class CreateTeamActivity extends AppCompatActivity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //TODO: move to MainActivity
-        Intent intent = new Intent(CreateTeamActivity.this, CreateEditTaskActivity.class);
+        Intent intent = new Intent(AddMembersActivity.this, CreateEditTaskActivity.class);
         startActivity(intent);
 //        // Check which request we're responding to
 //        if (requestCode == EMAIL_REQUEST) {

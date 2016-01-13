@@ -2,21 +2,17 @@ package com.shenkar.orgtasksystem.model;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.LogInCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
-import com.shenkar.orgtasksystem.views.CreateTeamActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,44 +27,46 @@ public class MVCModel {
     private List<Task> waitingTasks = new ArrayList<Task>();
     private List<Task> pendingTasks = new ArrayList<Task>();
 
-    private static final String DB_NAME = "ots_db";
-    private static final int DB_VERSION = 1;
+//    private static final String DB_NAME = "ots_db";
+//    private static final int DB_VERSION = 1;
+//
+//    private static final String MEMBERS_TABLE_NAME = "members";
+//    private static final String DB_CREATE_QUERY_MEMBERS = "CREATE TABLE " + MVCModel.MEMBERS_TABLE_NAME + " (_id integer primary key autoincrement, email text not null, password text not null, type integer);";
+//
+//    private static final String TASKS_TABLE_NAME = "tasks";
+//    private static final String DB_CREATE_QUERY_TASKS = "CREATE TABLE " + MVCModel.TASKS_TABLE_NAME + " (_id integer primary key autoincrement, description text not null, category text not null, priority text not null, assignedTeamMember text not null, dueDate text not null, dueTime text not null, longitude text not null, latitude text not null, status text not null);";
+//
+//    private final SQLiteDatabase database;
+//
+//    private final SQLiteOpenHelper helper;
+//
+//    public MVCModel(final Context ctx) {
+//        this.helper = new SQLiteOpenHelper(ctx, MVCModel.DB_NAME, null, MVCModel.DB_VERSION) {
+//            @Override
+//            public void onCreate(final SQLiteDatabase db) {
+//                db.execSQL(MVCModel.DB_CREATE_QUERY_TASKS);
+//                db.execSQL(MVCModel.DB_CREATE_QUERY_MEMBERS);
+//            }
+//
+//            @Override
+//            public void onUpgrade(final SQLiteDatabase db, final int oldVersion, final int newVersion) {
+//                db.execSQL("DROP TABLE IF EXISTS " + MVCModel.MEMBERS_TABLE_NAME);
+//                db.execSQL("DROP TABLE IF EXISTS " + MVCModel.TASKS_TABLE_NAME);
+//                this.onCreate(db);
+//            }
+//        };
+//        this.database = this.helper.getWritableDatabase();
+//    }
+//
+//    public void deleteMember(final String field_params) {
+//        this.database.delete(MVCModel.MEMBERS_TABLE_NAME, field_params, null);
+//    }
+//
+//    public void deleteTask(final String field_params) {
+//        this.database.delete(MVCModel.TASKS_TABLE_NAME, field_params, null);
+//    }
 
-    private static final String MEMBERS_TABLE_NAME = "members";
-    private static final String DB_CREATE_QUERY_MEMBERS = "CREATE TABLE " + MVCModel.MEMBERS_TABLE_NAME + " (_id integer primary key autoincrement, email text not null, password text not null, type integer);";
-
-    private static final String TASKS_TABLE_NAME = "tasks";
-    private static final String DB_CREATE_QUERY_TASKS = "CREATE TABLE " + MVCModel.TASKS_TABLE_NAME + " (_id integer primary key autoincrement, description text not null, category text not null, priority text not null, assignedTeamMember text not null, dueDate text not null, dueTime text not null, longitude text not null, latitude text not null, status text not null);";
-
-    private final SQLiteDatabase database;
-
-    private final SQLiteOpenHelper helper;
-
-    public MVCModel(final Context ctx) {
-        this.helper = new SQLiteOpenHelper(ctx, MVCModel.DB_NAME, null, MVCModel.DB_VERSION) {
-            @Override
-            public void onCreate(final SQLiteDatabase db) {
-                db.execSQL(MVCModel.DB_CREATE_QUERY_TASKS);
-                db.execSQL(MVCModel.DB_CREATE_QUERY_MEMBERS);
-            }
-
-            @Override
-            public void onUpgrade(final SQLiteDatabase db, final int oldVersion, final int newVersion) {
-                db.execSQL("DROP TABLE IF EXISTS " + MVCModel.MEMBERS_TABLE_NAME);
-                db.execSQL("DROP TABLE IF EXISTS " + MVCModel.TASKS_TABLE_NAME);
-                this.onCreate(db);
-            }
-        };
-        this.database = this.helper.getWritableDatabase();
-    }
-
-    public void deleteMember(final String field_params) {
-        this.database.delete(MVCModel.MEMBERS_TABLE_NAME, field_params, null);
-    }
-
-    public void addMember(ContentValues data, final Member member) {
-        this.database.insert(MVCModel.MEMBERS_TABLE_NAME, null, data);
-
+    public void addMember(final Member member) {
         //Create new team member
         ParseUser user = new ParseUser();
         user.setUsername(member.name);
@@ -106,10 +104,7 @@ public class MVCModel {
         });
     }
 
-    public void addTask(ContentValues data, Task task) {
-        //Insert to local
-        //this.database.insert(MVCModel.TASKS_TABLE_NAME, null, data);
-
+    public void addTask(Task task) {
         //Send to Parse
         ParseObject parseTask = new ParseObject("MemberTask");
         parseTask.put("description", task.description);
@@ -119,17 +114,14 @@ public class MVCModel {
         parseTask.put("dueDate", task.dueDate);
         parseTask.put("dueTime", task.dueTime);
         parseTask.put("location", task.location);
-//        parseTask.put("longitude", task.longitude);
-//        parseTask.put("latitude", task.latitude);
         parseTask.put("status", task.status);
         parseTask.saveInBackground();
     }
 
     public List<Task> loadDoneTasks(String memberName) throws ParseException {
-//        final Cursor c = this.database.query(MVCModel.TASKS_TABLE_NAME, new String[]{"description", "assignedTeamMember", "dueDate", "dueTime", "category", "priority", "_id", "status"}, "status=?", new String[]{"DONE"}, null, null, "dueDate ASC");
-//        return c;
         ParseQuery<ParseObject> query = ParseQuery.getQuery("MemberTask");
         query.whereEqualTo("status", "DONE");
+        query.orderByAscending("dueDate");
         if (memberName != null) {
             query.whereEqualTo("assignedTeamMember", memberName);
         }
@@ -144,8 +136,6 @@ public class MVCModel {
             myObject.category = object.getString("category");
             myObject.dueDate = object.getString("dueDate");
             myObject.location = object.getString("location");
-//            myObject.latitude= object.getString("latitude");
-//            myObject.longitude = object.getString("longitude");
             myObject.priority = object.getString("priority");
             doneTasks.add(myObject);
             Log.d("score", "Retrieved " + results.size() + " scores");
@@ -154,11 +144,9 @@ public class MVCModel {
     }
 
     public List<Task> loadWaitingTasks(String memberName) throws ParseException {
-        //final Cursor c = this.database.query(MVCModel.TASKS_TABLE_NAME, new String[]{"description", "assignedTeamMember", "dueDate", "dueTime", "category", "priority","_id", "status" }, "status=?", new String[] { "WAITING" }, null, null, "dueDate ASC");
-        //return c;
-
         ParseQuery<ParseObject> query = ParseQuery.getQuery("MemberTask");
         query.whereEqualTo("status", "WAITING");
+        query.orderByAscending("dueDate");
         if (memberName != null) {
             query.whereEqualTo("assignedTeamMember", memberName);
         }
@@ -173,46 +161,17 @@ public class MVCModel {
             myObject.category = object.getString("category");
             myObject.dueDate = object.getString("dueDate");
             myObject.location = object.getString("location");
-//            myObject.latitude= object.getString("latitude");
-//            myObject.longitude = object.getString("longitude");
             myObject.priority = object.getString("priority");
             waitingTasks.add(myObject);
             Log.d("score", "Retrieved " + results.size() + " scores");
         }
         return waitingTasks;
-//        query.findInBackground(new FindCallback<ParseObject>() {
-//            public void done(List<ParseObject> taskList, ParseException e) {
-//                if (e == null) {
-//                    for (int i = 0; i < taskList.size(); i++) {
-//                        Task myObject = new Task();
-//                        ParseObject object = taskList.get(i);
-//                        myObject.id = object.getObjectId();
-//                        myObject.description = (String) object.get("description");
-//                        myObject.assignedTeamMember = (String) object.get("assignedTeamMember");
-//                        myObject.dueTime = (String) object.get("dueTime");
-//                        myObject.status = (String) object.get("status");
-//                        myObject.category = (String) object.get("category");
-//                        myObject.dueDate = (String) object.get("dueDate");
-//                        myObject.latitude= (String) object.get("latitude");
-//                        myObject.longitude = (String) object.get("longitude");
-//                        myObject.priority = (String) object.get("priority");
-//                        waitingTasks.add(myObject);
-//                        Log.d("score", "Retrieved " + taskList.size() + " scores");
-//                    }
-//                } else {
-//                    Log.d("score", "Error: " + e.getMessage());
-//                }
-//            }
-//        });
-//
-//        return waitingTasks;
     }
 
     public List<Task> loadPendingTasks(String memberName) throws ParseException {
-        //final Cursor c = this.database.query(MVCModel.TASKS_TABLE_NAME, new String[]{"description", "assignedTeamMember", "dueDate", "dueTime", "category", "priority","_id", "status" }, "status=?", new String[] { "PENDING" }, null, null, "dueDate ASC");
-        //return c;
         ParseQuery<ParseObject> query = ParseQuery.getQuery("MemberTask");
         query.whereEqualTo("status", "PENDING");
+        query.orderByAscending("dueDate");
         if (memberName != null) {
             query.whereEqualTo("assignedTeamMember", memberName);
         }
@@ -227,8 +186,6 @@ public class MVCModel {
             myObject.category = object.getString("category");
             myObject.dueDate = object.getString("dueDate");
             myObject.location = object.getString("location");
-//            myObject.latitude= object.getString("latitude");
-//            myObject.longitude = object.getString("longitude");
             myObject.priority = object.getString("priority");
             pendingTasks.add(myObject);
             Log.d("score", "Retrieved " + results.size() + " scores");
@@ -237,8 +194,6 @@ public class MVCModel {
     }
 
     public List<String> loadAllMembers() throws ParseException {
-//        final Cursor c = this.database.query(MVCModel.MEMBERS_TABLE_NAME, new String[]{"email"}, null, null, null, null, null);
-//        return c;
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         List<ParseUser> results = query.find();
         for (ParseUser member : results){
@@ -249,11 +204,23 @@ public class MVCModel {
         return members;
     }
 
-    public void deleteTask(final String field_params) {
-        this.database.delete(MVCModel.TASKS_TABLE_NAME, field_params, null);
+    public void createTeamName(String mTeamName) {
+        ParseObject parseTeam = new ParseObject("TeamName");
+        parseTeam.put("name", mTeamName);
+        parseTeam.saveInBackground();
     }
 
-    public void updateTaskStatusByID(ContentValues data, String id) {
-        this.database.update(MVCModel.TASKS_TABLE_NAME, data, "_id=?", new String[] { id});
+    public void updateTaskStatusByID(final Task currentTask) {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("MemberTask");
+        // Retrieve the object by id
+        query.getInBackground(currentTask.id , new GetCallback<ParseObject>() {
+            public void done(ParseObject task, ParseException e) {
+                if (e == null) {
+                    // Now let's update it with some new data.
+                    task.put("status", currentTask.status);
+                    task.saveInBackground();
+                }
+            }
+        });
     }
 }

@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.parse.CountCallback;
-import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.Parse;
 
@@ -16,8 +15,6 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 import com.shenkar.orgtasksystem.R;
-
-import java.util.List;
 
 public class LoginActivity extends Activity {
 
@@ -33,13 +30,9 @@ public class LoginActivity extends Activity {
 
         //Move it to SplashActivity at the end
         Parse.initialize(this, "irUzywS69MpTb5AXjCsamv3vUr7Oh39xzkZJzkto", "rTbKss08HgSA1zrhmSCVPPsn989IlaJsmK1OWRNY");
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-
     }
 
     public void login(View v){
-        //TODO if Manager or regular user\ if user exists in Parse or not
         final String name, password, email;
         name = memberName.getText().toString();
         password = memberPass.getText().toString();
@@ -69,7 +62,7 @@ public class LoginActivity extends Activity {
                                         public void done(ParseUser user, ParseException e) {
                                             if (user != null) {
                                                 //The user is logged in.
-                                                Intent intent = new Intent(LoginActivity.this, CreateTeamActivity.class);
+                                                Intent intent = new Intent(LoginActivity.this, TeamNameActivity.class);
                                                 //intent.putExtra("username", name);
                                                 startActivity(intent);
                                             } else {

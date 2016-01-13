@@ -19,11 +19,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true">
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -37,6 +32,14 @@
                     <!--android:layout_marginLeft="20dp"-->
                     <!--android:layout_marginTop="10dp"-->
                     <!--android:textColor="#000000"/>-->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -51,7 +54,20 @@
                     android:layout_marginLeft="20dp"
                     android:id="@+id/left_drawer"
                     android:layout_width="match_parent"
-                    android:layout_height="240dp" />
+                    android:layout_height="210dp" />
+
+                <Button
+                    android:background="@color/colorAccent"
+                    android:theme="@style/ThemeOverlay.AppCompat.Dark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="20dp"
+                    android:text="ADD MEMBER"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:onClick="moveToAddMember"/>
+            </LinearLayout>
+        </ScrollView>
 
                 <android.support.v7.widget.SwitchCompat
                     android:id="@+id/loggedSwitch"
@@ -92,7 +108,6 @@
                     android:layout_marginTop="10dp"
                     android:textColor="#000000"/>
             </LinearLayout>
-        </ScrollView>
     </android.support.design.widget.NavigationView>
 
 </android.support.v4.widget.DrawerLayout>

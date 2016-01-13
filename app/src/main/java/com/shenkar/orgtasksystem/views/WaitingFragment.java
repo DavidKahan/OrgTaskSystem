@@ -16,28 +16,33 @@ import com.shenkar.orgtasksystem.controller.MVCController;
  */
 public class WaitingFragment extends Fragment {
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    //private RecyclerView.Adapter mAdapter;
     MVCController controller;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        controller = new MVCController(getActivity());
-        MainActivity activity = (MainActivity) getActivity();
-        String memberName = activity.getMemberName();
-        try {
-            mAdapter = new RecyclerAdapter(controller.loadWaitingTasks(memberName),getActivity());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_page, container, false);
+
+//        controller = new MVCController(getActivity());
+//        String memberName = activity.getMemberName();
+//        try {
+//            mAdapter = new RecyclerAdapter(controller.loadWaitingTasks(memberName),getActivity());
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//
+//        activity.stopSyncAnimation();
+
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerList);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerView.setAdapter(mAdapter);
+        MainActivity activity = (MainActivity) getActivity();
+        mRecyclerView.setAdapter(activity.mWaitingAdapter);
+
+
         return view;
     }
 }

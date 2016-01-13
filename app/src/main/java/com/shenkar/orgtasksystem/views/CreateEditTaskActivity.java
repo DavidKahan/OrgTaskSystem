@@ -130,14 +130,10 @@ public class CreateEditTaskActivity extends AppCompatActivity implements
         this.currentTask.assignedTeamMember = memberSpinner.getSelectedItem().toString();
         this.currentTask.description = taskDescription.getText().toString();
         this.currentTask.location = taskLocation.getText().toString();
-//        this.currentTask.longitude = "234235";
-//        this.currentTask.latitude = "234235";
         this.currentTask.status = "WAITING";
-
-        CreateEditTaskActivity.this.controller.addTask(this.currentTask);
+        this.controller.addTask(this.currentTask);
 
         Intent intent = new Intent(CreateEditTaskActivity.this,MainActivity.class);
-        //intent.putExtra("CurrentTask", currentTask);
         startActivity(intent);
     }
 

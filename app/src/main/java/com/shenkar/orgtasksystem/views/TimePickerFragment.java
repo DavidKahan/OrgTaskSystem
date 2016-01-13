@@ -34,6 +34,17 @@ public class TimePickerFragment extends DialogFragment
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         // Do something with the time chosen by the user
         TextView textview = (TextView)getActivity().findViewById(R.id.tvTime);
-        textview.setText(hourOfDay+":"+minute);
+        String hourString;
+        if (hourOfDay < 10)
+            hourString = "0" + hourOfDay;
+        else
+            hourString = "" +hourOfDay;
+
+        String minuteSting;
+        if (minute < 10)
+            minuteSting = "0" + minute;
+        else
+            minuteSting = "" +minute;
+        textview.setText(hourString+":"+minuteSting);
     }
 }
