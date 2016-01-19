@@ -42,5 +42,20 @@
 
     <string name="parse_app_id">irUzywS69MpTb5AXjCsamv3vUr7Oh39xzkZJzkto</string>
     <string name="parse_client_key">rTbKss08HgSA1zrhmSCVPPsn989IlaJsmK1OWRNY</string>
+    <string name="hadasanddavid">Hadas Nadan David Kahan</string>
+    <string name="otsversion">OTS 1.0</string>
+    <string name="about">About</string>
+    <string name="logoutologin">Logout/Login</string>
+    <string name="addmember">ADD MEMBER</string>
+    <string name="manageTeam">Manage Team</string>
+    <string name="defaultCheck"><![CDATA[Check for new tasks every <5> minutes]]></string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+
+    <string-array name="minutes">
+        <item>5</item>
+        <item>7</item>
+        <item>10</item>
+    </string-array>
 
 </resources>

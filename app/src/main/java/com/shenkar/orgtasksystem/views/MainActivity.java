@@ -23,6 +23,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.ParseException;
@@ -31,17 +32,20 @@ import com.shenkar.orgtasksystem.model.Task;
 import com.shenkar.orgtasksystem.controller.MVCController;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity  {
     private MVCController controller;
-    public Task addedTask = new Task();
     public Intent intent;
     private MenuItem mSyncMenuItem = null;
     private SwitchCompat loggedSwitch;
+    private TextView tvSync;
     private ListView mDrawerList;
     private List<String> members;
     private String memberName;
     public RecyclerView.Adapter mWaitingAdapter,mPendingAdapter,mDoneAdapter;
+    private Timer myTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +53,7 @@ public class MainActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        tvSync = (TextView) findViewById(R.id.syncSettings);
 
         intent = getIntent();
         if (intent.hasExtra("username")) {
@@ -58,6 +63,17 @@ public class MainActivity extends AppCompatActivity  {
         }
 
         setUpdatingData();
+
+        //set sync time to 5 minutes as default
+        myTimer = new Timer();
+        TimerTask sync =new TimerTask() {
+            @Override
+            public void run() {
+                TimerMethod();
+            }
+        };
+        myTimer.schedule(sync,0,1000*60*5);
+
         //region Pager and Tabs
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
@@ -120,7 +136,7 @@ public class MainActivity extends AppCompatActivity  {
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        // Inflate the menu
         getMenuInflater().inflate(R.menu.main, menu);
         mSyncMenuItem = menu.findItem(R.id.action_sync);
         return true;
@@ -128,18 +144,15 @@ public class MainActivity extends AppCompatActivity  {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_sync) {
-            startSyncAnimation();
             setUpdatingData();
-            stopSyncAnimation();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
     private void setUpdatingData() {
+        startSyncAnimation();
         this.controller = new MVCController(this);
         try {
             mWaitingAdapter = new RecyclerAdapter(controller.loadWaitingTasks(memberName),this);
@@ -148,6 +161,7 @@ public class MainActivity extends AppCompatActivity  {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        stopSyncAnimation();
     }
 
     public void stopSyncAnimation() {
@@ -185,28 +199,39 @@ public class MainActivity extends AppCompatActivity  {
         Intent intent = new Intent(MainActivity.this, AddMembersActivity.class);
         startActivity(intent);
     }
-//    @SuppressWarnings("StatementWithEmptyBody")
-//    @Override
-//    public boolean onNavigationItemSelected(MenuItem item) {
-//        // Handle navigation view item clicks here.
-//        int id = item.getItemId();
-//
-//        if (id == R.id.nav_camera) {
-//            // Handle the camera action
-//        } else if (id == R.id.nav_gallery) {
-//
-//        } else if (id == R.id.nav_slideshow) {
-//
-//        } else if (id == R.id.nav_manage) {
-//
-//        } else if (id == R.id.nav_share) {
-//
-//        } else if (id == R.id.nav_send) {
-//
-//        }
-//
-//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        drawer.closeDrawer(GravityCompat.START);
-//        return true;
-//    }
+
+    public void syncSettingsDialog(View view) {
+        MyAlert alert = new MyAlert();
+        alert.show(getFragmentManager(), "My Alert");
+    }
+
+    public void setSyncMin(int min){
+        tvSync.setText("Check for new tasks every <"+min+"> minutes");
+        myTimer.cancel();
+        myTimer = new Timer();
+        TimerTask sync =new TimerTask() {
+            @Override
+            public void run() {
+                TimerMethod();
+            }
+        };
+        myTimer.schedule(sync,0,1000*60*min);
+    }
+
+    private void TimerMethod()
+    {
+        //This method is called directly by the timer
+        //and runs in the same thread as the timer.
+
+        //We call the method that will work with the UI
+        //through the runOnUiThread method.
+        this.runOnUiThread(Timer_Tick);
+    }
+
+
+    private Runnable Timer_Tick = new Runnable() {
+        public void run() {
+            setUpdatingData();
+        }
+    };
 }
