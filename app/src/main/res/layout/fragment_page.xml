@@ -3,13 +3,40 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    tools:context="com.shenkar.shenkarmobile3.TaskListActivity">
+    tools:context=".views.MainActivity">
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_below="@+id/add_task_button"
-        android:id="@+id/recyclerList"
-        android:scrollbars="horizontal"
+    <TextView
+        android:id="@+id/no_tasks"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No Current Tasks"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/tasks_frame"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Number of Tasks:"/>
+            <TextView
+                android:id="@+id/num_tasks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerList"
+            android:scrollbars="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
 
 </RelativeLayout>

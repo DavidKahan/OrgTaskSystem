@@ -8,24 +8,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.shenkar.orgtasksystem.R;
 import com.shenkar.orgtasksystem.model.Task;
-import com.shenkar.orgtasksystem.controller.MVCController;
-
 import java.util.List;
-
 
 /**
  * Created by david on 27/10/2015.
  */
 public class RecyclerAdapter extends RecyclerView.Adapter <RecyclerAdapter.MyViewHolder>{
 
-    //private LayoutInflater inflater;
     private List<Task> tasks;
     private Activity activity;
-    private MVCController controller;
-//    private Task current;
 
     public RecyclerAdapter(List<Task> tasks) {
         this.tasks = tasks;
@@ -71,7 +64,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter <RecyclerAdapter.MyVie
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView description, memberEmail, dueDate;
         View taskView;
-        //Button done;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -80,7 +72,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter <RecyclerAdapter.MyVie
             description = (TextView) itemView.findViewById(R.id.taskDescription);
             memberEmail= (TextView) itemView.findViewById(R.id.taskAssignedMember);
             dueDate = (TextView) itemView.findViewById(R.id.taskDueDate);
-            //done = (Button) itemView.findViewById(R.id.done_button);
         }
     }
 }

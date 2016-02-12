@@ -12,10 +12,18 @@ import com.shenkar.orgtasksystem.controller.MVCController;
 public class TeamNameActivity extends AppCompatActivity {
     private MVCController controller;
     private EditText teamName;
+    public Intent intent;
+    private int userType;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_team_name);
+
+        intent = getIntent();
+        if (intent.hasExtra("username")) {
+            userType = intent.getIntExtra("type",0);
+        }
 
         this.controller = new MVCController(this);
         this.teamName = (EditText) this.findViewById(R.id.teamName);
@@ -25,7 +33,7 @@ public class TeamNameActivity extends AppCompatActivity {
         String mTeamName =  teamName.getText().toString();
         this.controller.createTeamName(mTeamName);
         Intent intent = new Intent(TeamNameActivity.this, AddMembersActivity.class);
-        //intent.putExtra("TeamName", teamName.getText().toString());
+        intent.putExtra("type", userType );
         startActivity(intent);
     }
 }

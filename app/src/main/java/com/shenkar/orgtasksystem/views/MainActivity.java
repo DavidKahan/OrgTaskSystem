@@ -23,10 +23,12 @@ import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.ParseException;
+import com.parse.ParseUser;
 import com.shenkar.orgtasksystem.R;
 import com.shenkar.orgtasksystem.model.Task;
 import com.shenkar.orgtasksystem.controller.MVCController;
@@ -43,9 +45,11 @@ public class MainActivity extends AppCompatActivity  {
     private TextView tvSync;
     private ListView mDrawerList;
     private List<String> members;
-    private String memberName;
+    private String currentUserEmail;
+    private int currentUserType;
     public RecyclerView.Adapter mWaitingAdapter,mPendingAdapter,mDoneAdapter;
     private Timer myTimer;
+    private ScrollView manageTeam;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,15 +58,14 @@ public class MainActivity extends AppCompatActivity  {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         tvSync = (TextView) findViewById(R.id.syncSettings);
+        manageTeam = (ScrollView) findViewById(R.id.manage_team);
+//        intent = getIntent();
+//        ParseUser.getCurrentUser();
+        currentUserEmail = ParseUser.getCurrentUser().getEmail();
+        currentUserType = Integer.parseInt(ParseUser.getCurrentUser().getString("type"));
 
-        intent = getIntent();
-        if (intent.hasExtra("username")) {
-            memberName = intent.getStringExtra("username");
-        } else {
-            memberName = null;
-        }
 
-        setUpdatingData();
+        setUpdatingData(currentUserEmail, currentUserType);
 
         //set sync time to 5 minutes as default
         myTimer = new Timer();
@@ -87,32 +90,34 @@ public class MainActivity extends AppCompatActivity  {
         //endregion
 
         //region fab and drawer
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, CreateEditTaskActivity.class);
-                startActivity(intent);
+        if (currentUserType == 0) {
+            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+            fab.setVisibility(View.VISIBLE);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(MainActivity.this, CreateEditTaskActivity.class);
+                    startActivity(intent);
+                }
+            });
+
+            mDrawerList = (ListView) findViewById(R.id.left_drawer);
+            try {
+                members = this.controller.getMembers();
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
-        });
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
-        try {
-            members = this.controller.getMembers();
-        } catch (ParseException e) {
-            e.printStackTrace();
+            this.mDrawerList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, members.toArray(new String[]{})));
+            manageTeam.setVisibility(View.VISIBLE);
         }
-        this.mDrawerList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, members.toArray(new String[]{})));
-
-
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-//        navigationView.setNavigationItemSelectedListener(this);
+//        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+//        navigationView.setNavigationItemSelectedListener();
 
         loggedSwitch = (SwitchCompat) findViewById(R.id.loggedSwitch);
         loggedSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -145,21 +150,31 @@ public class MainActivity extends AppCompatActivity  {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_sync) {
-            setUpdatingData();
+            setUpdatingData(currentUserEmail, currentUserType);
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void setUpdatingData() {
+    private void setUpdatingData(String memberEmail, int memberType) {
         startSyncAnimation();
         this.controller = new MVCController(this);
-        try {
-            mWaitingAdapter = new RecyclerAdapter(controller.loadWaitingTasks(memberName),this);
-            mPendingAdapter = new RecyclerAdapter(controller.loadPendingTasks(memberName),this);
-            mDoneAdapter = new RecyclerAdapter(controller.loadDoneTasks(memberName),this);
-        } catch (ParseException e) {
-            e.printStackTrace();
+        if (memberType == 1) {
+            try {
+                mWaitingAdapter = new RecyclerAdapter(controller.loadWaitingTasks(memberEmail), this);
+                mPendingAdapter = new RecyclerAdapter(controller.loadPendingTasks(memberEmail), this);
+                mDoneAdapter = new RecyclerAdapter(controller.loadDoneTasks(memberEmail), this);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                mWaitingAdapter = new RecyclerAdapter(controller.loadWaitingTasks(null), this);
+                mPendingAdapter = new RecyclerAdapter(controller.loadPendingTasks(null), this);
+                mDoneAdapter = new RecyclerAdapter(controller.loadDoneTasks(null), this);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
         stopSyncAnimation();
     }
@@ -218,8 +233,7 @@ public class MainActivity extends AppCompatActivity  {
         myTimer.schedule(sync,0,1000*60*min);
     }
 
-    private void TimerMethod()
-    {
+    private void TimerMethod(){
         //This method is called directly by the timer
         //and runs in the same thread as the timer.
 
@@ -228,10 +242,9 @@ public class MainActivity extends AppCompatActivity  {
         this.runOnUiThread(Timer_Tick);
     }
 
-
     private Runnable Timer_Tick = new Runnable() {
         public void run() {
-            setUpdatingData();
+            setUpdatingData(currentUserEmail,currentUserType);
         }
     };
 }

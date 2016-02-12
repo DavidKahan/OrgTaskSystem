@@ -1,6 +1,5 @@
 package com.shenkar.orgtasksystem.views;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -13,7 +12,6 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import com.parse.ParseException;
 import com.shenkar.orgtasksystem.R;
 import com.shenkar.orgtasksystem.model.Task;
@@ -27,9 +25,9 @@ public class CreateEditTaskActivity extends AppCompatActivity implements
     private MVCController controller;
     Task currentTask = new Task();
     TextView tvDate, tvTime;
-    EditText taskLocation, taskDescription;
+    EditText taskDescription;
     RadioButton radioCategory, radioPriority;
-    Spinner memberSpinner;
+    Spinner memberSpinner , locationSpinner;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,11 +35,16 @@ public class CreateEditTaskActivity extends AppCompatActivity implements
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         this.controller = new MVCController(this);
+        this.locationSpinner = (Spinner) findViewById(R.id.task_location_spinner);
+        this.memberSpinner = (Spinner) findViewById(R.id.task_member_spinner);
 
-        memberSpinner = (Spinner) findViewById(R.id.member_emails_spinner);
-        memberSpinner.setOnItemSelectedListener(this);
+        ArrayAdapter<CharSequence> locationAdapter = ArrayAdapter.createFromResource(this,R.array.task_location_array, android.R.layout.simple_spinner_item);
+        locationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        locationSpinner.setAdapter(locationAdapter);
+
+//        loadTaskLocationSpinnerData();
         try {
-            loadSpinnerData();
+            loadTaskMemberSpinnerData();
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -49,7 +52,6 @@ public class CreateEditTaskActivity extends AppCompatActivity implements
         this.tvDate = (TextView) findViewById(R.id.tvDate);
         this.tvTime = (TextView) findViewById(R.id.tvTime);
         this.taskDescription = (EditText) findViewById(R.id.taskDescription);
-        this.taskLocation = (EditText) findViewById(R.id.taskLocation);
         this.radioCategory = (RadioButton) findViewById(R.id.radio_general);
         this.radioCategory.setChecked(true);
         this.currentTask.category = "general";
@@ -59,13 +61,19 @@ public class CreateEditTaskActivity extends AppCompatActivity implements
         this.currentTask.priority = "normal";
     }
 
-    private void loadSpinnerData() throws ParseException {
+    private void loadTaskMemberSpinnerData() throws ParseException {
         List<String> labels = this.controller.getMembers();
         ArrayAdapter<String> membersAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, labels);
-        membersAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        membersAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         memberSpinner.setAdapter(membersAdapter);
     }
+
+//    private void loadTaskLocationSpinnerData() {
+//        ArrayAdapter<CharSequence> locationAdapter = ArrayAdapter.createFromResource(this,R.array.task_location_array, android.R.layout.simple_spinner_item);
+//        locationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        memberSpinner.setAdapter(locationAdapter);
+//    }
 
     public void showDatePickerDialog(View v) {
         DialogFragment newFragment = new DatePickerFragment();
@@ -123,28 +131,35 @@ public class CreateEditTaskActivity extends AppCompatActivity implements
         }
     }
 
-    public void save(View view) {
-        //TODO: error handling
-        this.currentTask.dueDate = tvDate.getText().toString();
-        this.currentTask.dueTime = tvTime.getText().toString();
-        this.currentTask.assignedTeamMember = memberSpinner.getSelectedItem().toString();
-        this.currentTask.description = taskDescription.getText().toString();
-        this.currentTask.location = taskLocation.getText().toString();
-        this.currentTask.status = "WAITING";
-        this.controller.addTask(this.currentTask);
-
-        Intent intent = new Intent(CreateEditTaskActivity.this,MainActivity.class);
-        startActivity(intent);
-    }
-
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String label = parent.getItemAtPosition(position).toString();
-        this.currentTask.assignedTeamMember = label;
+        Spinner spinner = (Spinner) parent;
+        if(spinner.getId() == R.id.task_member_spinner){
+            String label = parent.getItemAtPosition(position).toString();
+            this.currentTask.assignedTeamMember = label;
+        }
+        else if(spinner.getId() == R.id.task_location_spinner){
+            String label = parent.getItemAtPosition(position).toString();
+            this.currentTask.location = label;
+        }
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
+    }
+
+    public void save(View view) throws ParseException {
+        //TODO: error handling
+        this.currentTask.dueDate = tvDate.getText().toString();
+        this.currentTask.dueTime = tvTime.getText().toString();
+        this.currentTask.assignedTeamMember = memberSpinner.getSelectedItem().toString();
+        this.currentTask.description = taskDescription.getText().toString();
+        this.currentTask.location = locationSpinner.getSelectedItem().toString();
+        this.currentTask.status = "WAITING";
+        this.controller.addTask(this.currentTask);
+
+        Intent intent = new Intent(CreateEditTaskActivity.this,MainActivity.class);
+        startActivity(intent);
     }
 }

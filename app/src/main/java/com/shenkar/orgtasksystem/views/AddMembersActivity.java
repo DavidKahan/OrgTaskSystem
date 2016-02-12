@@ -82,9 +82,8 @@ public class AddMembersActivity extends AppCompatActivity {
     }
 
     private void populateEmails() throws ParseException {
-        //members.clear();
+        if (members != null) members.clear();
         members = this.controller.getMembers();
-
         this.lvEmails.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, members.toArray(new String[]{})));
 //        this.lvEmails.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
@@ -111,6 +110,7 @@ public class AddMembersActivity extends AppCompatActivity {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        this.controller = new MVCController(this);
         memberName.setText("");
         memberEmail.setText("");
         memberPass.setText("");
@@ -140,6 +140,7 @@ public class AddMembersActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //TODO: move to MainActivity
         Intent intent = new Intent(AddMembersActivity.this, CreateEditTaskActivity.class);
+        intent.putExtra("type", TYPE_MANAGER);
         startActivity(intent);
 //        // Check which request we're responding to
 //        if (requestCode == EMAIL_REQUEST) {

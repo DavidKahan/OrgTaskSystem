@@ -4,21 +4,16 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ProgressBar;
-
 import com.shenkar.orgtasksystem.R;
 
 public class SplashActivity extends Activity {
-
     ProgressBar pb;
     int i = 0;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-
         pb = (ProgressBar) findViewById(R.id.progressBar);
-
         Thread tLoader = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -42,9 +37,6 @@ public class SplashActivity extends Activity {
                 }
             }
         });
-
         tLoader.start();
     }
-
-
 }

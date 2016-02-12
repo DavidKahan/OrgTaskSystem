@@ -27,6 +27,14 @@
         <item>PENDING</item>
         <item>DONE</item>
     </string-array>
+
+    <string-array name="task_location_array">
+        <item>Shenkar</item>
+        <item>Raanana</item>
+        <item>Work</item>
+        <item>Home</item>
+    </string-array>
+
     <string name="title_activity_main2">Main2Activity</string>
     <string name="title_activity_main">MainActivity</string>
 

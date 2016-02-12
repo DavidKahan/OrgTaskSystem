@@ -102,11 +102,10 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Task Location:"
                 android:id="@+id/textView5" />
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/taskLocation"
-                android:hint="Tap and enter task location" />
+            <Spinner
+                android:id="@+id/task_location_spinner"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
             <LinearLayout
                 android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
@@ -153,7 +152,7 @@
                 android:text="Assigned Team Member Email:" />
 
             <Spinner
-                android:id="@+id/member_emails_spinner"
+                android:id="@+id/task_member_spinner"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" />
 

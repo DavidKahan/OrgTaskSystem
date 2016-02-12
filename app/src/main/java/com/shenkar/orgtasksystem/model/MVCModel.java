@@ -1,18 +1,16 @@
 package com.shenkar.orgtasksystem.model;
 
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
-
-import com.parse.GetCallback;
+import com.parse.FindCallback;
+import com.parse.GetDataCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.SignUpCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +20,11 @@ import java.util.List;
  * Created by David on 11/23/2015.
  */
 public class MVCModel {
-    private List<String> members = new ArrayList<String>();
-    private List<Task> doneTasks = new ArrayList<Task>();
+    private List<String> members    = new ArrayList<String>();
+    private List<Task> doneTasks    = new ArrayList<Task>();
     private List<Task> waitingTasks = new ArrayList<Task>();
     private List<Task> pendingTasks = new ArrayList<Task>();
+    private Bitmap     bmp                              ;
 
 //    private static final String DB_NAME = "ots_db";
 //    private static final int DB_VERSION = 1;
@@ -76,35 +75,49 @@ public class MVCModel {
 
         //Save current parse user session
         final String session = ParseUser.getCurrentUser().getSessionToken();
-
-        user.signUpInBackground(new SignUpCallback() {
+        try {
+            user.signUp();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        ParseUser.becomeInBackground(session, new LogInCallback() {
             @Override
-            public void done(ParseException e) {
-                if (e == null) {
-                    ParseUser.logInInBackground(member.name, member.password, new LogInCallback() {
-                        @Override
-                        public void done(ParseUser parseUser, ParseException e) {
-                            ParseUser.becomeInBackground(session, new LogInCallback() {
-                                @Override
-                                public void done(ParseUser parseUser, ParseException e) {
-                                    if (parseUser != null) {
-                                        // The current user is now set to user.
-                                    } else {
-                                        // The token could not be validated.
-                                    }
-                                }
-                            });
-                        }
-                    });
-
+            public void done(ParseUser parseUser, ParseException e) {
+                if (parseUser != null) {
+                    // The current user is now set to user.
                 } else {
-                    // Sighup failed. Look at the ParseException to see what happened.
+                    // The token could not be validated.
                 }
             }
         });
+//        user.signUpInBackground(new SignUpCallback() {
+//            @Override
+//            public void done(ParseException e) {
+//                if (e == null) {
+//                    ParseUser.logInInBackground(member.name, member.password, new LogInCallback() {
+//                        @Override
+//                        public void done(ParseUser parseUser, ParseException e) {
+//                            ParseUser.becomeInBackground(session, new LogInCallback() {
+//                                @Override
+//                                public void done(ParseUser parseUser, ParseException e) {
+//                                    if (parseUser != null) {
+//                                        // The current user is now set to user.
+//                                    } else {
+//                                        // The token could not be validated.
+//                                    }
+//                                }
+//                            });
+//                        }
+//                    });
+//
+//                } else {
+//                    // Sighup failed. Look at the ParseException to see what happened.
+//                }
+//            }
+//        });
     }
 
-    public void addTask(Task task) {
+    public void addTask(Task task) throws ParseException {
         //Send to Parse
         ParseObject parseTask = new ParseObject("MemberTask");
         parseTask.put("description", task.description);
@@ -115,15 +128,15 @@ public class MVCModel {
         parseTask.put("dueTime", task.dueTime);
         parseTask.put("location", task.location);
         parseTask.put("status", task.status);
-        parseTask.saveInBackground();
+        parseTask.save();
     }
 
-    public List<Task> loadDoneTasks(String memberName) throws ParseException {
+    public List<Task> loadDoneTasks(String memberEmail) throws ParseException {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("MemberTask");
         query.whereEqualTo("status", "DONE");
         query.orderByAscending("dueDate");
-        if (memberName != null) {
-            query.whereEqualTo("assignedTeamMember", memberName);
+        if (memberEmail != null) {
+            query.whereEqualTo("assignedTeamMember", memberEmail);
         }
         List<ParseObject> results = query.find();
         for (ParseObject object : results){
@@ -143,12 +156,12 @@ public class MVCModel {
         return doneTasks;
     }
 
-    public List<Task> loadWaitingTasks(String memberName) throws ParseException {
+    public List<Task> loadWaitingTasks(String memberEmail) throws ParseException {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("MemberTask");
         query.whereEqualTo("status", "WAITING");
         query.orderByAscending("dueDate");
-        if (memberName != null) {
-            query.whereEqualTo("assignedTeamMember", memberName);
+        if (memberEmail != null) {
+            query.whereEqualTo("assignedTeamMember", memberEmail);
         }
         List<ParseObject> results = query.find();
         for (ParseObject object : results){
@@ -163,17 +176,16 @@ public class MVCModel {
             myObject.location = object.getString("location");
             myObject.priority = object.getString("priority");
             waitingTasks.add(myObject);
-            Log.d("score", "Retrieved " + results.size() + " scores");
         }
         return waitingTasks;
     }
 
-    public List<Task> loadPendingTasks(String memberName) throws ParseException {
+    public List<Task> loadPendingTasks(String memberEmail) throws ParseException {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("MemberTask");
         query.whereEqualTo("status", "PENDING");
         query.orderByAscending("dueDate");
-        if (memberName != null) {
-            query.whereEqualTo("assignedTeamMember", memberName);
+        if (memberEmail != null) {
+            query.whereEqualTo("assignedTeamMember", memberEmail);
         }
         List<ParseObject> results = query.find();
         for (ParseObject object : results){
@@ -197,8 +209,8 @@ public class MVCModel {
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         List<ParseUser> results = query.find();
         for (ParseUser member : results){
-            String myMemberName = member.getString("username");
-            members.add(myMemberName);
+            String mMemberEmail = member.getString("email");
+            members.add(mMemberEmail);
             Log.d("members", "Retrieved " + results.size() + " members");
         }
         return members;
@@ -210,17 +222,98 @@ public class MVCModel {
         parseTeam.saveInBackground();
     }
 
-    public void updateTaskStatusByID(final Task currentTask) {
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("MemberTask");
-        // Retrieve the object by id
-        query.getInBackground(currentTask.id , new GetCallback<ParseObject>() {
-            public void done(ParseObject task, ParseException e) {
+    public String getTeamName() throws ParseException{
+        String name = "";
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("TeamName");
+        List<ParseObject> results = query.find();
+        for (ParseObject teamName : results) {
+            name = teamName.getString("name");
+        }
+        return name;
+    }
+
+    public String getManagerName() throws ParseException {
+        final String[] manager = {""};
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.whereEqualTo("type","0");
+        query.find();
+        query.findInBackground(new FindCallback<ParseUser>() {
+            public void done(List<ParseUser> objects, ParseException e) {
                 if (e == null) {
-                    // Now let's update it with some new data.
-                    task.put("status", currentTask.status);
-                    task.saveInBackground();
+                    // The query was successful.
+//                    ParseUser u = (ParseUser)objects.get(0);
+//                    String name = u.getUsername();
+                    manager[0] = objects.get(0).getUsername();
+                } else {
+                    // Something went wrong.
                 }
             }
         });
+        return manager[0];
+    }
+
+    public void updateTaskStatusByID(final Task currentTask) throws ParseException {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("MemberTask");
+        // Retrieve the object by id
+        ParseObject task = query.get(currentTask.id);
+        task.put("status", currentTask.status);
+        task.save();
+//        query.getInBackground(currentTask.id, new GetCallback<ParseObject>() {
+//            public void done(ParseObject task, ParseException e) {
+//                if (e == null) {
+//                    // Now let's update it with some new data.
+//
+//                    try {
+//                        task.save();
+//                    } catch (ParseException e1) {
+//                        e1.printStackTrace();
+//                    }
+//                }
+//            }
+//        });
+    }
+
+    public void uploadImage(String id, byte[] image) throws ParseException {
+        // Create the ParseFile
+        ParseFile file = new ParseFile(id+".png", image);
+        // Upload the image into Parse Cloud
+        file.save();
+        // Create a New Class called "ImageUpload" in Parse
+        ParseObject imgupload = new ParseObject("ImageUpload");
+        // Create a column named "ImageName" and set the string
+        imgupload.put("ImageName", id);
+        // Create a column named "ImageFile" and insert the image
+        imgupload.put("ImageFile", file);
+        // Create the class and the columns
+        imgupload.save();
+    }
+
+    public Bitmap loadImageById(String id) throws ParseException {
+        // Locate the class table named "ImageUpload" in Parse.com
+        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>( "ImageUpload");
+        query.whereEqualTo("ImageName",id);
+        List<ParseObject> results = null;
+        results = query.find();
+        for (ParseObject object : results) {
+            ParseFile fileObject = (ParseFile) object.get("ImageFile");
+            byte[] data = fileObject.getData();
+            bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
+//            fileObject.getDataInBackground(new GetDataCallback() {
+//                public void done(byte[] data, ParseException e) {
+//                    if (e == null) {
+//                        Log.d("test", "We've got data in data.");
+//                        // Decode the Byte[] into
+//                        // Bitmap
+//                        bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
+//                    } else {
+//                        Log.d("test",
+//                                "There was a problem downloading the data.");
+//                    }
+//                }
+//            });
+        }
+
+
+        return bmp;
     }
 }

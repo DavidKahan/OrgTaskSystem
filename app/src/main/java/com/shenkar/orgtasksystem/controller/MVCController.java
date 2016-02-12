@@ -1,15 +1,12 @@
 package com.shenkar.orgtasksystem.controller;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
-
+import android.graphics.Bitmap;
 import com.parse.ParseException;
 import com.shenkar.orgtasksystem.model.MVCModel;
 import com.shenkar.orgtasksystem.model.Member;
 import com.shenkar.orgtasksystem.model.Task;
-
-import java.util.ArrayList;
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 /**
@@ -36,16 +33,24 @@ public class MVCController {
         return model.loadAllMembers();
     }
 
-    public List<Task> loadDoneTasks(String memberName) throws ParseException {
-        return model.loadDoneTasks(memberName);
+    public String getTeamName() throws ParseException {
+        return model.getTeamName();
     }
 
-    public List<Task> loadWaitingTasks(String memberName) throws ParseException {
-        return model.loadWaitingTasks(memberName);
+    public String getManagerName() throws ParseException {
+        return model.getManagerName();
     }
 
-    public List<Task> loadPendingTasks(String memberName) throws ParseException {
-        return model.loadPendingTasks(memberName);
+    public List<Task> loadDoneTasks(String memberEmail) throws ParseException {
+        return model.loadDoneTasks(memberEmail);
+    }
+
+    public List<Task> loadWaitingTasks(String memberEmail) throws ParseException {
+        return model.loadWaitingTasks(memberEmail);
+    }
+
+    public List<Task> loadPendingTasks(String memberEmail) throws ParseException {
+        return model.loadPendingTasks(memberEmail);
     }
 
     public void addMember(Member member) {
@@ -56,12 +61,25 @@ public class MVCController {
         model.createTeamName(mTeamName);
     }
 
-    public void addTask(Task task) {
+    public void addTask(Task task) throws ParseException {
         model.addTask(task);
     }
 
-    public void updateTaskStatusByID(Task task) {
+    public void updateTaskStatusByID(Task task) throws ParseException {
         model.updateTaskStatusByID(task);
+    }
+
+    public void uploadImage(String id, Bitmap imageBitmap) throws ParseException {
+        // Convert bitmap to byte
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        // Compress image to lower quality scale 1 - 100
+        imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] image = stream.toByteArray();
+        model.uploadImage(id, image);
+    }
+
+    public Bitmap loadImageById(String id) throws ParseException {
+        return model.loadImageById(id);
     }
 
 //    public void deleteMember(String s) {
