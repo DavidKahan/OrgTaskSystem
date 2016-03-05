@@ -104,7 +104,11 @@ public class AddMembersActivity extends AppCompatActivity {
         this.addedMember.email = memberEmail.getText().toString();
         this.addedMember.password = memberPass.getText().toString();
         this.addedMember.type = TYPE_TEAM_MEMBER ;
-        AddMembersActivity.this.controller.addMember(this.addedMember);
+        try {
+            AddMembersActivity.this.controller.addMember(this.addedMember);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         try {
             AddMembersActivity.this.populateEmails();
         } catch (ParseException e) {

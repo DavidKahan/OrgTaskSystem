@@ -106,18 +106,40 @@
                 android:id="@+id/task_location_spinner"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Task Due Date:" />
             <LinearLayout
-                android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Today"
+                    android:id="@+id/tody"
+                    android:onClick="setForToday"/>
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tomorrow"
+                    android:id="@+id/tomorrow"
+                    android:onClick="setForTomorrow"/>
 
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="10dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Task Due Date:" />
-
+                    android:text="Date Picker:" />
                 <TextView
                     style="@android:style/Widget.DeviceDefault.Light.Spinner"
                     android:textSize="12sp"
@@ -127,15 +149,14 @@
                     android:onClick="showDatePickerDialog"/>
             </LinearLayout>
             <LinearLayout
-                android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginLeft="10dp">
                 <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Task Due Time:" />
+                android:text="Time Picker:" />
                 <TextView
                     style="@android:style/Widget.DeviceDefault.Light.Spinner"
                     android:textSize="12sp"
@@ -144,6 +165,7 @@
                     android:id="@+id/tvTime"
                     android:onClick="showTimePickerDialog"/>
             </LinearLayout>
+
             <TextView
                 android:layout_marginTop="30dp"
                 android:layout_width="wrap_content"

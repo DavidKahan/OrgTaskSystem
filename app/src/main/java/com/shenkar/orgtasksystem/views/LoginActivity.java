@@ -59,7 +59,7 @@ public class LoginActivity extends Activity {
                             public void done(ParseException e) {
                                 if (e == null) {
                                     //Log him in
-                                    ParseUser.logInInBackground(memberName.getText().toString(), memberPass.getText().toString(), new LogInCallback() {
+                                    ParseUser.logInInBackground(name, password, new LogInCallback() {
                                         public void done(ParseUser user, ParseException e) {
                                             if (user != null) {
                                                 //The user is logged in.

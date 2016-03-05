@@ -9,7 +9,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.view.View;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -30,7 +29,6 @@ import android.widget.Toast;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.shenkar.orgtasksystem.R;
-import com.shenkar.orgtasksystem.model.Task;
 import com.shenkar.orgtasksystem.controller.MVCController;
 
 import java.util.List;
@@ -39,7 +37,6 @@ import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity  {
     private MVCController controller;
-    public Intent intent;
     private MenuItem mSyncMenuItem = null;
     private SwitchCompat loggedSwitch;
     private TextView tvSync;
@@ -50,6 +47,8 @@ public class MainActivity extends AppCompatActivity  {
     public RecyclerView.Adapter mWaitingAdapter,mPendingAdapter,mDoneAdapter;
     private Timer myTimer;
     private ScrollView manageTeam;
+    public ViewPager viewPager;
+    public MyFragmentPagerAdapter myFragmentPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,11 +58,8 @@ public class MainActivity extends AppCompatActivity  {
         setSupportActionBar(toolbar);
         tvSync = (TextView) findViewById(R.id.syncSettings);
         manageTeam = (ScrollView) findViewById(R.id.manage_team);
-//        intent = getIntent();
-//        ParseUser.getCurrentUser();
         currentUserEmail = ParseUser.getCurrentUser().getEmail();
         currentUserType = Integer.parseInt(ParseUser.getCurrentUser().getString("type"));
-
 
         setUpdatingData(currentUserEmail, currentUserType);
 
@@ -79,9 +75,10 @@ public class MainActivity extends AppCompatActivity  {
 
         //region Pager and Tabs
         // Get the ViewPager and set it's PagerAdapter so that it can display items
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        viewPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(),
-                MainActivity.this));
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        myFragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(),
+                MainActivity.this);
+        viewPager.setAdapter(myFragmentPagerAdapter);
 
         // Give the TabLayout the ViewPager
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
@@ -116,8 +113,6 @@ public class MainActivity extends AppCompatActivity  {
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-//        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-//        navigationView.setNavigationItemSelectedListener();
 
         loggedSwitch = (SwitchCompat) findViewById(R.id.loggedSwitch);
         loggedSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -161,17 +156,24 @@ public class MainActivity extends AppCompatActivity  {
         this.controller = new MVCController(this);
         if (memberType == 1) {
             try {
-                mWaitingAdapter = new RecyclerAdapter(controller.loadWaitingTasks(memberEmail), this);
-                mPendingAdapter = new RecyclerAdapter(controller.loadPendingTasks(memberEmail), this);
-                mDoneAdapter = new RecyclerAdapter(controller.loadDoneTasks(memberEmail), this);
+
+                mWaitingAdapter = new RecyclerAdapter(controller.loadWaitingTasksFromParse(memberEmail), this);
+                mWaitingAdapter.notifyDataSetChanged();
+                mPendingAdapter = new RecyclerAdapter(controller.loadPendingTasksFromParse(memberEmail), this);
+                mPendingAdapter.notifyDataSetChanged();
+                mDoneAdapter = new RecyclerAdapter(controller.loadDoneTasksFromParse(memberEmail), this);
+                mDoneAdapter.notifyDataSetChanged();
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         } else {
             try {
-                mWaitingAdapter = new RecyclerAdapter(controller.loadWaitingTasks(null), this);
-                mPendingAdapter = new RecyclerAdapter(controller.loadPendingTasks(null), this);
-                mDoneAdapter = new RecyclerAdapter(controller.loadDoneTasks(null), this);
+                mWaitingAdapter = new RecyclerAdapter(controller.loadWaitingTasksFromParse(null), this);
+                mWaitingAdapter.notifyDataSetChanged();
+                mPendingAdapter = new RecyclerAdapter(controller.loadPendingTasksFromParse(null), this);
+                mPendingAdapter.notifyDataSetChanged();
+                mDoneAdapter = new RecyclerAdapter(controller.loadDoneTasksFromParse(null), this);
+                mDoneAdapter.notifyDataSetChanged();
             } catch (ParseException e) {
                 e.printStackTrace();
             }

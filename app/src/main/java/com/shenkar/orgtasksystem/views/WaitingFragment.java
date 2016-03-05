@@ -35,6 +35,7 @@ public class WaitingFragment extends Fragment {
 
         MainActivity activity = (MainActivity) getActivity();
         int tasksNum = activity.mWaitingAdapter.getItemCount();
+        //Check if there are tasks to display
         if ( tasksNum > 0 ) {
             mNoTasksTxt.setVisibility(View.GONE);
             mTasksFrame.setVisibility(View.VISIBLE);

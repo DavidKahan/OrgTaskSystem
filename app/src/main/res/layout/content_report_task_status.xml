@@ -133,52 +133,44 @@
                     android:layout_height="wrap_content" />
             </LinearLayout>
             <LinearLayout
-                android:layout_marginTop="10dp"
+                android:id="@+id/accept_status_lay"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <TextView
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Set Task Status:" />
+                    <Spinner
+                        android:id="@+id/task_status_spinner"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <Button
+                    android:onClick="dispatchTakePictureIntent"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Set Task Status:" />
-                <Spinner
-                    android:id="@+id/task_status_spinner"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content" />
+                    android:text="Add photo"
+                    android:id="@+id/photoButton"/>
+
+                <ImageView
+                    android:layout_alignParentBottom="true"
+                    android:layout_gravity="center_horizontal"
+                    android:id="@+id/camPic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"/>
             </LinearLayout>
-            <Button
-                android:onClick="dispatchTakePictureIntent"
-                android:layout_gravity="center_horizontal"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Add photo"
-                android:id="@+id/photoButton"/>
-
-            <!--<ImageView-->
-                <!--android:id="@+id/camPic"-->
-                <!---->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content" />-->
-            <ImageView
-                android:layout_alignParentBottom="true"
-                android:layout_gravity="center_horizontal"
-                android:id="@+id/camPic"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"/>
-
-            <!--<Button-->
-                <!--android:id="@+id/download_button"-->
-                <!--android:layout_width="fill_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_below="@+id/image"-->
-                <!--android:layout_centerHorizontal="true"-->
-                <!--android:text="download" />-->
-
         </LinearLayout>
     </ScrollView>
 
