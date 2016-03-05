@@ -359,33 +359,14 @@ public class MVCModel {
         task.put("acceptStatus", currentTask.acceptStatus);
         task.put("status", currentTask.status);
         task.save();
-//        query.getInBackground(currentTask.id, new GetCallback<ParseObject>() {
-//            public void done(ParseObject task, ParseException e) {
-//                if (e == null) {
-//                    // Now let's update it with some new data.
-//
-//                    try {
-//                        task.save();
-//                    } catch (ParseException e1) {
-//                        e1.printStackTrace();
-//                    }
-//                }
-//            }
-//        });
     }
 
     public void uploadImage(String id, byte[] image) throws ParseException {
-        // Create the ParseFile
         ParseFile file = new ParseFile(id + ".png", image);
-        // Upload the image into Parse Cloud
         file.save();
-        // Create a New Class called "ImageUpload" in Parse
         ParseObject imgupload = new ParseObject("ImageUpload");
-        // Create a column named "ImageName" and set the string
         imgupload.put("ImageName", id);
-        // Create a column named "ImageFile" and insert the image
         imgupload.put("ImageFile", file);
-        // Create the class and the columns
         imgupload.save();
     }
 

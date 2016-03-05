@@ -59,7 +59,7 @@
             android:id="@+id/login_btnLogin"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Login"
+            android:text="@string/start"
             android:padding="10dp"
             android:background="@color/colorAccent"
             android:textSize="20dp"

@@ -30,8 +30,7 @@ public class LoginActivity extends Activity {
         this.memberEmail = (EditText) this.findViewById(R.id.memberEmail);
         this.memberPass = (EditText) this.findViewById(R.id.memberPass);
 
-        //Move it to SplashActivity at the end
-        Parse.initialize(this, "irUzywS69MpTb5AXjCsamv3vUr7Oh39xzkZJzkto", "rTbKss08HgSA1zrhmSCVPPsn989IlaJsmK1OWRNY");
+
     }
 
     public void login(View v){

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.parse.ParseException;
@@ -19,7 +20,7 @@ import com.shenkar.orgtasksystem.controller.MVCController;
  */
 public class WaitingFragment extends Fragment {
     private RecyclerView mRecyclerView;
-    private LinearLayout mTasksFrame;
+    private RelativeLayout mTasksFrame;
     private TextView mNoTasksTxt, mNumTasks;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -29,7 +30,7 @@ public class WaitingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_page, container, false);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerList);
-        mTasksFrame = (LinearLayout) view.findViewById(R.id.tasks_frame);
+        mTasksFrame = (RelativeLayout) view.findViewById(R.id.tasks_frame);
         mNoTasksTxt = (TextView) view.findViewById(R.id.no_tasks);
         mNumTasks = (TextView) view.findViewById(R.id.num_tasks);
 
@@ -43,6 +44,7 @@ public class WaitingFragment extends Fragment {
             mRecyclerView.setHasFixedSize(true);
             mRecyclerView.setLayoutManager(new LinearLayoutManager(activity));
             mRecyclerView.setAdapter(activity.mWaitingAdapter);
+            mRecyclerView.invalidate();
         }
         return view;
     }

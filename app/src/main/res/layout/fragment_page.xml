@@ -7,6 +7,7 @@
     android:id="@+id/fragment_layout">
 
     <TextView
+        android:visibility="gone"
         android:id="@+id/no_tasks"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -14,8 +15,8 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
-    <LinearLayout
-        android:visibility="gone"
+    <RelativeLayout
+
         android:id="@+id/tasks_frame"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -23,7 +24,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:id="@+id/linearLayout">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -37,7 +39,9 @@
             android:id="@+id/recyclerList"
             android:scrollbars="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/linearLayout"
+            android:layout_alignParentStart="true" />
+    </RelativeLayout>
 
 </RelativeLayout>

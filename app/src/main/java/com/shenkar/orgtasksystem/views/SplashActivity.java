@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ProgressBar;
+
+import com.parse.Parse;
+import com.parse.ParseUser;
 import com.shenkar.orgtasksystem.R;
 
 public class SplashActivity extends Activity {
@@ -14,6 +17,9 @@ public class SplashActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         pb = (ProgressBar) findViewById(R.id.progressBar);
+//        ParseUser.getCurrentUser()
+        //Move it to SplashActivity at the end
+        Parse.initialize(this, "irUzywS69MpTb5AXjCsamv3vUr7Oh39xzkZJzkto", "rTbKss08HgSA1zrhmSCVPPsn989IlaJsmK1OWRNY");
         Thread tLoader = new Thread(new Runnable() {
             @Override
             public void run() {

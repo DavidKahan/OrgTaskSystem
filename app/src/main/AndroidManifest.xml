@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
+        android:name=".AnalyticsApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -25,20 +26,21 @@
         <!-- android:value="rTbKss08HgSA1zrhmSCVPPsn989IlaJsmK1OWRNY" /> -->
         <activity
             android:name=".views.SplashActivity"
-            android:label="@string/ots" />
-        <activity
-            android:name=".views.LoginActivity"
-            android:label="@string/app_name">
+            android:label="@string/ots">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".views.LoginActivity"
+            android:label="@string/app_name"></activity>
         <activity
             android:name=".views.AddMembersActivity"
             android:label="@string/title_activity_create_team"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".views.CreateEditTaskActivity"
             android:label="@string/title_activity_create_edit_task"
@@ -50,12 +52,13 @@
         <activity
             android:name=".views.MainActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".views.TeamNameActivity" />
-        <activity android:name=".views.NotificationActivity"
-            android:taskAffinity=""
-            android:excludeFromRecents="true">
-        </activity>
+        <activity
+            android:name=".views.NotificationActivity"
+            android:excludeFromRecents="true"
+            android:taskAffinity=""></activity>
+        <activity android:name=".AnalyticsApplication"></activity>
     </application>
 
 </manifest>

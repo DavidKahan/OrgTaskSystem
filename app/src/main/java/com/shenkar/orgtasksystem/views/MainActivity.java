@@ -8,6 +8,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
+import android.util.Log;
 import android.view.View;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -26,8 +27,11 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.parse.ParseException;
 import com.parse.ParseUser;
+import com.shenkar.orgtasksystem.AnalyticsApplication;
 import com.shenkar.orgtasksystem.R;
 import com.shenkar.orgtasksystem.controller.MVCController;
 
@@ -35,7 +39,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity {
     private MVCController controller;
     private MenuItem mSyncMenuItem = null;
     private SwitchCompat loggedSwitch;
@@ -44,7 +48,7 @@ public class MainActivity extends AppCompatActivity  {
     private List<String> members;
     private String currentUserEmail;
     private int currentUserType;
-    public RecyclerView.Adapter mWaitingAdapter,mPendingAdapter,mDoneAdapter;
+    public RecyclerView.Adapter mWaitingAdapter, mPendingAdapter, mDoneAdapter;
     private Timer myTimer;
     private ScrollView manageTeam;
     public ViewPager viewPager;
@@ -56,6 +60,9 @@ public class MainActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        // Obtain the shared Tracker instance.
+        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        final Tracker mTracker = application.getDefaultTracker();
         tvSync = (TextView) findViewById(R.id.syncSettings);
         manageTeam = (ScrollView) findViewById(R.id.manage_team);
         currentUserEmail = ParseUser.getCurrentUser().getEmail();
@@ -65,13 +72,13 @@ public class MainActivity extends AppCompatActivity  {
 
         //set sync time to 5 minutes as default
         myTimer = new Timer();
-        TimerTask sync =new TimerTask() {
+        TimerTask sync = new TimerTask() {
             @Override
             public void run() {
                 TimerMethod();
             }
         };
-        myTimer.schedule(sync,0,1000*60*5);
+        myTimer.schedule(sync, 0, 1000 * 60 * 5);
 
         //region Pager and Tabs
         // Get the ViewPager and set it's PagerAdapter so that it can display items
@@ -79,6 +86,27 @@ public class MainActivity extends AppCompatActivity  {
         myFragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(),
                 MainActivity.this);
         viewPager.setAdapter(myFragmentPagerAdapter);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+                Log.i("David", "screen name: " + myFragmentPagerAdapter.getPageTitle(position));
+                mTracker.setScreenName((String) myFragmentPagerAdapter.getPageTitle(position));
+                mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
         // Give the TabLayout the ViewPager
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
@@ -118,7 +146,7 @@ public class MainActivity extends AppCompatActivity  {
         loggedSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                Intent intent = new Intent(MainActivity.this,LoginActivity.class);
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
         });
@@ -134,6 +162,7 @@ public class MainActivity extends AppCompatActivity  {
             super.onBackPressed();
         }
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu
@@ -141,6 +170,7 @@ public class MainActivity extends AppCompatActivity  {
         mSyncMenuItem = menu.findItem(R.id.action_sync);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -156,7 +186,6 @@ public class MainActivity extends AppCompatActivity  {
         this.controller = new MVCController(this);
         if (memberType == 1) {
             try {
-
                 mWaitingAdapter = new RecyclerAdapter(controller.loadWaitingTasksFromParse(memberEmail), this);
                 mWaitingAdapter.notifyDataSetChanged();
                 mPendingAdapter = new RecyclerAdapter(controller.loadPendingTasksFromParse(memberEmail), this);
@@ -222,20 +251,20 @@ public class MainActivity extends AppCompatActivity  {
         alert.show(getFragmentManager(), "My Alert");
     }
 
-    public void setSyncMin(int min){
-        tvSync.setText("Check for new tasks every <"+min+"> minutes");
+    public void setSyncMin(int min) {
+        tvSync.setText("Check for new tasks every <" + min + "> minutes");
         myTimer.cancel();
         myTimer = new Timer();
-        TimerTask sync =new TimerTask() {
+        TimerTask sync = new TimerTask() {
             @Override
             public void run() {
                 TimerMethod();
             }
         };
-        myTimer.schedule(sync,0,1000*60*min);
+        myTimer.schedule(sync, 0, 1000 * 60 * min);
     }
 
-    private void TimerMethod(){
+    private void TimerMethod() {
         //This method is called directly by the timer
         //and runs in the same thread as the timer.
 
@@ -246,7 +275,7 @@ public class MainActivity extends AppCompatActivity  {
 
     private Runnable Timer_Tick = new Runnable() {
         public void run() {
-            setUpdatingData(currentUserEmail,currentUserType);
+            setUpdatingData(currentUserEmail, currentUserType);
         }
     };
 }

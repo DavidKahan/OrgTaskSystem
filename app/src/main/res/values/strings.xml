@@ -59,6 +59,7 @@
     <string name="defaultCheck"><![CDATA[Check for new tasks every <5> minutes]]></string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
+    <string name="start">Start</string>
 
     <string-array name="minutes">
         <item>5</item>

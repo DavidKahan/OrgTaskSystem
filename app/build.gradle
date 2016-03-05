@@ -33,5 +33,7 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:23.1.1'
     compile 'com.wdullaer:materialdatetimepicker:2.1.0'
     compile fileTree(dir: 'libs', include:'Parse-*.jar')
-    compile 'com.google.android.gms:play-services:8.3.0'
+    compile 'com.google.android.gms:play-services:8.4.0'
+    compile 'com.google.android.gms:play-services-analytics:8.4.0'
 }
+apply plugin: 'com.google.gms.google-services'
